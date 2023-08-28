@@ -14,7 +14,84 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/detalles.css') }}">   
 </head>
-<body>
-    
+<body class="p-4">
+    <div class="contenedor m-5">
+        <div class="card carta w-75">
+            <div class="card-body">
+              <h4 class="card-title text-center">Ficha Paciente: {{ paciente[1] }}</h4>
+              <form class="p-3" method="POST" action="#">
+                <div class="mb-3">
+                    <label for="nombrePaciente" class="form-label">Nombre Completo:</label>
+                    <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="{{ paciente[1] }}" required>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <label for="edadPaciente" class="form-label">Edad:</label>
+                        <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" value="{{ paciente[2] }}" required>
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label for="fechaNac" class="form-label">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control" id="fechaNac" name="fechaNac" value="{{ paciente[3] }}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="telPaciente" class="form-label">Teléfono:</label>
+                    <input type="tel" class="form-control" id="telPaciente" name="telPaciente" value="{{ paciente[4] }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="ocupacion" class="form-label">Ocupación:</label>
+                    <input type="text" class="form-control" id="ocupacion" name="ocupacion">
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <label for="enfermedades" class="form-label">Enfermedades:</label>
+                        <input type="text" class="form-control" id="enfermedades" name="enfermedades" />
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label for="enfermedadesCro" class="form-label">Enfermedades crónicas:</label>
+                        <input type="text" class="form-control" id="enfermedadesCro" name="enfermedadesCro">
+                    </div>
+                </div>
+                <div class="mb-3 ">
+                    <label for="medicamentos" class="form-label">Medicamentos que toma actualmente:</label>
+                    <input type="text" class="form-control" id="medicamentos" name="medicamentos" />
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-6">
+                        <label for="alergias" class="form-label">Alergias:</label>
+                        <input type="text" class="form-control" id="alergias" name="alergias">
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label for="implatesDispositivos" class="form-label">Implantes o dispositivos:</label>
+                        <input type="text" class="form-control" id="implatesDispositivos" name="implatesDispositivos">
+                    </div>
+                </div>
+              </form>
+              <div class="tratamientos px-3">
+                <h4>Tratamientos:</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sesion</th>
+                            <th>Tratamiento</th>
+                            <th>Fecha Tratamiento</th>
+                            <th>Firma Paciente</th>
+                        </tr> 
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for tratamiento in tratamientos %}
+                            <tr>
+                                <td>{{ tratamiento[3] }}</td> 
+                                <td>{{ tratamiento[2] }}</td> 
+                                <td>{{ tratamiento[4] }}</td> 
+                                <td>{{ tratamiento[5] }}</td> 
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
