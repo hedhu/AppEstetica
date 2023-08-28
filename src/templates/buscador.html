@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador</title>
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <!-- FUENTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buscador.css') }}">
+</head>
+<body>
+    <div class="buscar">
+        <form  method="get" class="searchBar mt-2">
+            <input type="text" placeholder="Buscar Paciente..." name="buscador"/>
+            <button type="submit"><img src="{{ url_for('static', filename='img/search.png') }}"/></button>
+        </form>
+    </div>
+    <div class="pacientes">
+    {% if npacientes == 0 %}
+        <div class="card my-5 center-card">
+            <h5 class="card-header text-center">No se encontraron pacientes ingresados</h5>
+            <div class="card-body">
+                <h5 class="card-title">No se ha encontrado ningun paciente</h5>
+                <p class="card-text">Para agregar un paciente presione el siguiente botón.</p>
+                <a class="btn btn-success botn" data-bs-toggle="modal" data-bs-target="#agregarPaciente">Agregar Paciente</a>
+            </div>
+        </div>
+    {% else %}
+        <table class="table table-striped my-5 w-75">
+            <thead>
+               <tr>
+                    <th>Nombre Paciente</th>
+                    <th>Edad</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Teléfono</th>
+                    <th>Detalles</th>
+               </tr> 
+            </thead>
+            <tbody>
+                {% for paciente in pacientes %}
+                    <tr>
+                       <td>{{ paciente[1] }}</td> 
+                       <td>{{ paciente[2] }}</td> 
+                       <td>{{ paciente[3] }}</td> 
+                       <td>{{ paciente[4] }}</td> 
+                       <td><a href="{{ url_for('detallesPaciente') }}" class="btn btn-success">Ver Detalles</a></td> 
+                    </a<>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    
+
+
+
+
+    <!-- MODAL AGREGAR PACIENTES -->
+    <div class="modal fade" id="agregarPaciente" tabindex="-1" aria-labelledby="agregarPaciente" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarHabilidadLabel">Agregar Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="agregarPacienteForm" method="POST" action="{{ url_for('agregarPaciente') }}">
+                        <div class="mb-3">
+                            <label for="nombrePaciente" class="form-label">Nombre Completo:</label>
+                            <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edadPaciente" class="form-label">Edad:</label>
+                            <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaNac" class="form-label">Fecha de Nacimiento:</label>
+                            <input type="date" class="form-control" id="fechaNac" name="fechaNac" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telPaciente" class="form-label">Teléfono:</label>
+                            <input type="tel" class="form-control" id="telPaciente" name="telPaciente" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Agregar Paciente Al Sistema</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

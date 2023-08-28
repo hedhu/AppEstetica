@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 25%, transparent 26%),radial-gradient(circle at bottom left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at bottom right, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top right, rgba(0,0,0,0.1) 12%, transparent 13%);
+    background-size: 1em 1em;
+    background-color: #dee2e6;
+}
+
+.buscar {
+    width: 100%;
+    padding: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: start
+}
+
+.searchBar {
+    width: 100%;
+    max-width: 700px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    border-radius: 60px;
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+    padding: 10px 20px;
+    backdrop-filter: blur(4px) saturate(100%);
+}
+
+.searchBar input {
+    background: transparent;
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 24px 20px;
+    font-size: 20px;
+    color: #252629;
+}
+
+::placeholder {
+    color: #252629;
+}
+
+.searchBar button img {
+    width: 25px;
+}
+
+.searchBar button {
+    border: 0;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    background: #252629;
+    cursor: pointer;
+}
+
+.pacientes {
+    display: flex;
+    justify-content: center;
+
+}
+
+.card {
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+}
+
+.center-card {
+    text-align: center;
+}
