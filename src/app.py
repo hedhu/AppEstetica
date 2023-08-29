@@ -10,6 +10,8 @@ app.config['MYSQL_DB'] = 'estetica'
 
 mysql = MySQL(app)
 
+app.secret_key = "CRkETIkXn0fAU:"
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -64,9 +66,17 @@ def agregarPaciente():
         cursor.close()
         return redirect(url_for('buscador'))
 
-@app.route('/detallesPaciente')
-def detallesPaciente():
-    return render_template('detallesPaciente.html')
+@app.route('/detallesPaciente/<string:id>')
+def detallesPaciente(id):
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM pacientes WHERE idPacientes = %s', (id,))
+    paciente = cursor.fetchone()
+    cursor.execute('SELECT * FROM tratamientos WHERE idPaciente = %s', (id,))
+    tratamientos = cursor.fetchall()
+    print(tratamientos)
+    cursor.close()
+    return render_template('detallesPaciente.html', paciente=paciente, tratamientos=tratamientos)
 
 
 
