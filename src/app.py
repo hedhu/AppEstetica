@@ -72,9 +72,17 @@ def detallesPaciente(id):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM pacientes WHERE idPacientes = %s', (id,))
     paciente = cursor.fetchone()
-    cursor.execute('SELECT * FROM tratamientos WHERE idPaciente = %s', (id,))
-    tratamientos = cursor.fetchall()
+    
+    cursor.execute('SELECT idTratamientos FROM tratamientospacientes WHERE idPaciente = %s', (id,))
+    id_tratamientos = [row[0] for row in cursor.fetchall()]
+    
+    tratamientos = []
+    for id_tratamiento in id_tratamientos:
+        cursor.execute('SELECT * FROM tratamientos WHERE idTratamiento = %s', (id_tratamiento,))
+        tratamiento = cursor.fetchone()
+        tratamientos.append(tratamiento)
     print(tratamientos)
+        
     cursor.close()
     return render_template('detallesPaciente.html', paciente=paciente, tratamientos=tratamientos)
 

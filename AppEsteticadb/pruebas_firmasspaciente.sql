@@ -16,36 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pacientes`
+-- Table structure for table `firmasspaciente`
 --
 
-DROP TABLE IF EXISTS `pacientes`;
+DROP TABLE IF EXISTS `firmasspaciente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pacientes` (
-  `idPacientes` int NOT NULL AUTO_INCREMENT,
-  `nombrePaciente` varchar(70) NOT NULL,
-  `edadPaciente` int NOT NULL,
-  `fechaNacimiento` varchar(70) NOT NULL,
-  `Telefono` varchar(45) NOT NULL,
-  `Ocupacion` varchar(70) DEFAULT NULL,
-  `Enfermedades` varchar(120) DEFAULT NULL,
-  `EnfermedadesCronicas` varchar(120) DEFAULT NULL,
-  `Medicamentos` varchar(120) DEFAULT NULL,
-  `Alergias` varchar(120) DEFAULT NULL,
-  `Implantes_Dispositivos` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`idPacientes`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `firmasspaciente` (
+  `idsesionesPaciente` int NOT NULL AUTO_INCREMENT,
+  `idTratamientosPaciente` int NOT NULL,
+  `firmas` int DEFAULT NULL,
+  `rutaFirma` varchar(175) DEFAULT NULL,
+  PRIMARY KEY (`idsesionesPaciente`),
+  KEY `idTratamientosPaciente_fk_idx` (`idTratamientosPaciente`),
+  CONSTRAINT `idTratamientosPaciente_fk` FOREIGN KEY (`idTratamientosPaciente`) REFERENCES `tratamientospacientes` (`idtratamientosPacientes`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pacientes`
+-- Dumping data for table `firmasspaciente`
 --
 
-LOCK TABLES `pacientes` WRITE;
-/*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
-INSERT INTO `pacientes` VALUES (11,'Eduardo Gallardo',19,'1112-02-07','12312321',NULL,NULL,NULL,NULL,NULL,NULL),(12,'Julio Bascuñan',38,'2832-03-08','23423',NULL,NULL,NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
+LOCK TABLES `firmasspaciente` WRITE;
+/*!40000 ALTER TABLE `firmasspaciente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `firmasspaciente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
