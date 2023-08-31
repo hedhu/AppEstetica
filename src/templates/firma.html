@@ -1,0 +1,11 @@
+{% if tratamiento[5] == None %}
+                                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a></td>
+                                {% else %}
+                                    <td>{{ tratamiento[5] }}</td>
+                                {% endif %}
+
+                                <div class="form-group mt-4">
+                                    <label>Firma:</label>
+                                    <canvas id="signature-pad" width="400" height="200"></canvas>
+                                    <button type="button" class="btn btn-light" id="clear">Limpiar Firma</button>
+                                </div>

@@ -24,16 +24,11 @@ DROP TABLE IF EXISTS `tratamientos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tratamientos` (
   `idTratamiento` int NOT NULL AUTO_INCREMENT,
-  `idPaciente` int NOT NULL,
   `nombreTratamiento` varchar(150) NOT NULL,
   `numSesiones` int NOT NULL,
   `fechaTratamiento` varchar(120) NOT NULL,
-  `firmaPaciente` int DEFAULT NULL,
-  `rutaFirma` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`idTratamiento`),
-  KEY `idPaciente_pk_idx` (`idPaciente`),
-  CONSTRAINT `idPaciente_pk` FOREIGN KEY (`idPaciente`) REFERENCES `pacientes` (`idPacientes`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`idTratamiento`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +37,7 @@ CREATE TABLE `tratamientos` (
 
 LOCK TABLES `tratamientos` WRITE;
 /*!40000 ALTER TABLE `tratamientos` DISABLE KEYS */;
+INSERT INTO `tratamientos` VALUES (1,'Depilacion Laser',3,'2023-08-09');
 /*!40000 ALTER TABLE `tratamientos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-28 10:53:51
+-- Dump completed on 2023-08-30 13:46:25
