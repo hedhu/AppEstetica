@@ -57,6 +57,12 @@ body {
     height: 60px;
     background: #252629;
     cursor: pointer;
+    transition: all 0,3s;
+}
+
+.searchBar button:hover {
+    border: none;
+    background: #3b3939;
 }
 
 .tabla {

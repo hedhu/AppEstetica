@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.svg') }}" type="image/x-icon">
-    <!-- FUENTES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <!-- CSS -->
+{% extends './index.html' %}
+{% block title %}Login{% endblock %}
+
+{% block customCSSyJs %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div id="login">
         <form id="formLogin" action="/login" method="POST">
             <h1>Bienvenido</h1>
@@ -30,5 +23,4 @@
             <input type="submit" class="submitButton" name="login" value="Ingresar" />
         </form>
     </div>
-</body>
-</html>
+{% endblock %}

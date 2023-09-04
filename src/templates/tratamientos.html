@@ -1,0 +1,54 @@
+{% extends './index.html' %}
+
+{% block title %}Tratamientos{% endblock %}
+
+{% block customCSSyJs %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tratamientos.css') }}">
+    <script src="{{ url_for('static', filename='js/tratamientos.js') }}"></script>   
+{% endblock %}
+
+{% block content %}
+<div class='tratamientos p-4 m-2 d-flex flex-column justify-content-center'>
+    <h2>Tratamientos: </h2>
+
+    {% if ntratamientos == 0 %}
+    {% else %}
+        <div class='my-2'>
+            <form class="row g-3 p-1" method="POST" action="/agregarTratamientos">
+                <div class="col-auto">
+                  <label for="nombreTratamiento" class="visually-hidden">Email</label>
+                  <input type="text" class="form-control" id="nombreTratamiento" name="nombreTratamiento" placeholder="Nombre Tratamiento">
+                </div>
+                <!-- <div class="col-auto">
+                  <label for="numSesiones" class="visually-hidden">Password</label>
+                  <input type="number" class="form-control" id="numSesiones" name="numSesiones" placeholder="Numero Sesiones">
+                </div> -->
+                <div class="col-auto">
+                  <button type="submit" id="d" class="btn btn-success mb-2">Agregar</button>
+                </div>
+              </form>
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <!-- <th>Nº Sesiones</th> -->
+                    <th>Opciones</th>
+                </tr> 
+            </thead>
+            <tbody class="table-group-divider">
+                {% for tratamiento in tratamientos %}
+                    <tr>
+                        <td>{{ tratamiento[0] }}</td> 
+                        <td>{{ tratamiento[1] }}</td> 
+                        <!-- <td>{{ tratamiento[2] }}</td>  -->
+                        <td class="d-flex justify-content-around"><a class="btn btn-warning" href="#"><i class="bi bi-pencil-square"></i></a><a class="btn btn-danger" href="#"><i class="bi bi-trash"></i></a></td> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+</div>
+{% endblock %}

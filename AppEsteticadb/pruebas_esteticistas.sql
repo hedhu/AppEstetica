@@ -16,38 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tratamientospacientes`
+-- Table structure for table `esteticistas`
 --
 
-DROP TABLE IF EXISTS `tratamientospacientes`;
+DROP TABLE IF EXISTS `esteticistas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tratamientospacientes` (
-  `idtratamientosPacientes` int NOT NULL AUTO_INCREMENT,
-  `idTratamientos` int NOT NULL,
-  `idPaciente` int NOT NULL,
-  `idEsteticista` int NOT NULL,
-  `fechaTratamiento` varchar(20) NOT NULL,
-  `numSesiones` int NOT NULL,
-  `observaciones` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`idtratamientosPacientes`),
-  KEY `idTratamientos_fk_idx` (`idTratamientos`),
-  KEY `idPaciente_fk_idx` (`idPaciente`),
-  KEY `idEsteticistas_fk_idx` (`idEsteticista`),
-  CONSTRAINT `idEsteticistas_fk` FOREIGN KEY (`idEsteticista`) REFERENCES `esteticistas` (`idEsteticistas`),
-  CONSTRAINT `idPaciente_fk` FOREIGN KEY (`idPaciente`) REFERENCES `pacientes` (`idPacientes`),
-  CONSTRAINT `idTratamientos_fk` FOREIGN KEY (`idTratamientos`) REFERENCES `tratamientos` (`idTratamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `esteticistas` (
+  `idEsteticistas` int NOT NULL AUTO_INCREMENT,
+  `nombreEsteticista` varchar(150) NOT NULL,
+  PRIMARY KEY (`idEsteticistas`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tratamientospacientes`
+-- Dumping data for table `esteticistas`
 --
 
-LOCK TABLES `tratamientospacientes` WRITE;
-/*!40000 ALTER TABLE `tratamientospacientes` DISABLE KEYS */;
-INSERT INTO `tratamientospacientes` VALUES (9,3,16,1,'2023-09-26',2,''),(11,1,16,1,'2023-09-23',8,''),(12,29,16,1,'2023-09-14',2,'');
-/*!40000 ALTER TABLE `tratamientospacientes` ENABLE KEYS */;
+LOCK TABLES `esteticistas` WRITE;
+/*!40000 ALTER TABLE `esteticistas` DISABLE KEYS */;
+INSERT INTO `esteticistas` VALUES (1,'Pedro Sanchez');
+/*!40000 ALTER TABLE `esteticistas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

@@ -1,151 +1,159 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles Paciente</title>
-    <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <!-- FUENTES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <!-- CSS -->
+{% extends './index.html' %}
+{% block title %}Detalles Paciente{% endblock %}
+
+{% block customCSSyJs %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/detalles.css') }}">
-    <!-- JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>   
-</head>
-<body class="p-4">
-    <div class="contenedor m-2">
-        <div class="card carta w-75">
-            <div class="card-body">
-              <h4 class="card-title text-center">Ficha Paciente: {{ paciente[1] }}</h4>
-              <form class="p-3" method="POST" action="#">
-                <div class="mb-3">
-                    <label for="nombrePaciente" class="form-label">Nombre Completo:</label>
-                    <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="{{ paciente[1] }}" required>
+{% endblock %}
+    
+{% block content %}
+<div class="contenedor m-2">
+    <div class="card carta w-75">
+        <div class="card-body">
+          <h4 class="card-title text-center">Ficha Paciente: {{ paciente[1] }}</h4>
+          <form class="p-3" method="POST" action="#">
+            <div class="mb-3">
+                <label for="nombrePaciente" class="form-label">Nombre Completo:</label>
+                <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="{{ paciente[1] }}" required>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <label for="edadPaciente" class="form-label">Edad:</label>
+                    <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" value="{{ paciente[2] }}" required>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="edadPaciente" class="form-label">Edad:</label>
-                        <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" value="{{ paciente[2] }}" required>
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label for="fechaNac" class="form-label">Fecha de Nacimiento:</label>
-                        <input type="date" class="form-control" id="fechaNac" name="fechaNac" value="{{ paciente[3] }}" required>
-                    </div>
+                <div class="mb-3 col-6">
+                    <label for="fechaNac" class="form-label">Fecha de Nacimiento:</label>
+                    <input type="date" class="form-control" id="fechaNac" name="fechaNac" value="{{ paciente[3] }}" required>
                 </div>
-                <div class="mb-3">
-                    <label for="telPaciente" class="form-label">Teléfono:</label>
-                    <input type="tel" class="form-control" id="telPaciente" name="telPaciente" value="{{ paciente[4] }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="telPaciente" class="form-label">Teléfono:</label>
+                <input type="tel" class="form-control" id="telPaciente" name="telPaciente" value="{{ paciente[4] }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="ocupacion" class="form-label">Ocupación:</label>
+                <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ paciente[5] }}">
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <label for="enfermedades" class="form-label">Enfermedades:</label>
+                    <input type="text" class="form-control" id="enfermedades" name="enfermedades" value="{{ paciente[6] }}"/>
                 </div>
-                <div class="mb-3">
-                    <label for="ocupacion" class="form-label">Ocupación:</label>
-                    <input type="text" class="form-control" id="ocupacion" name="ocupacion">
+                <div class="mb-3 col-6">
+                    <label for="enfermedadesCro" class="form-label">Enfermedades crónicas:</label>
+                    <input type="text" class="form-control" id="enfermedadesCro" name="enfermedadesCro" value="{{ paciente[7] }}" />
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="enfermedades" class="form-label">Enfermedades:</label>
-                        <input type="text" class="form-control" id="enfermedades" name="enfermedades" />
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label for="enfermedadesCro" class="form-label">Enfermedades crónicas:</label>
-                        <input type="text" class="form-control" id="enfermedadesCro" name="enfermedadesCro">
-                    </div>
+            </div>
+            <div class="mb-3 ">
+                <label for="medicamentos" class="form-label">Medicamentos que toma actualmente:</label>
+                <input type="text" class="form-control" id="medicamentos" name="medicamentos" value="{{ paciente[8] }}" />
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <label for="alergias" class="form-label">Alergias:</label>
+                    <input type="text" class="form-control" id="alergias" name="alergias" value="{{ paciente[9] }}" />
                 </div>
-                <div class="mb-3 ">
-                    <label for="medicamentos" class="form-label">Medicamentos que toma actualmente:</label>
-                    <input type="text" class="form-control" id="medicamentos" name="medicamentos" />
+                <div class="mb-3 col-6">
+                    <label for="implatesDispositivos" class="form-label">Implantes o dispositivos:</label>
+                    <input type="text" class="form-control" id="implatesDispositivos" name="implatesDispositivos" value="{{ paciente[10] }}" />
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label for="alergias" class="form-label">Alergias:</label>
-                        <input type="text" class="form-control" id="alergias" name="alergias">
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label for="implatesDispositivos" class="form-label">Implantes o dispositivos:</label>
-                        <input type="text" class="form-control" id="implatesDispositivos" name="implatesDispositivos">
-                    </div>
-                </div>
-              </form>
-              <div class="tratamientos px-3">
-                <div class="d-inline-flex w-100 justify-content-between mb-3">
-                    <h4>Tratamientos:</h4>
-                    <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarTratamiento">Agregar tratamiento</a>
-                </div>
-                <table class="table table-striped table-bordered">
-                    <thead>
+            </div>
+          </form>
+          <div class="tratamientos px-3">
+            <div class="d-inline-flex w-100 justify-content-between mb-3">
+                <h4>Tratamientos:</h4>
+                <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarTratamiento">Agregar tratamiento</a>
+            </div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sesiones</th>
+                        <th>Tratamiento</th>
+                        <th>Fecha Tratamiento</th>
+                        <th>Detalles</th>
+                    </tr> 
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for tratamientoP, tratamiento in data %}
                         <tr>
-                            <th>Sesiones</th>
-                            <th>Tratamiento</th>
-                            <th>Fecha Tratamiento</th>
-                            <th>Detalles</th>
-                        </tr> 
-                    </thead>
-                    <tbody class="table-group-divider">
-                        {% for tratamiento in tratamientos %}
-                            <tr>
-                                <td>{{ tratamiento[2] }}</td> 
-                                <td>{{ tratamiento[1] }}</td> 
-                                <td>{{ tratamiento[3] }}</td> 
-                                <td><a class="btn btn-success">Ver Detalles</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-              </div>
-            </div>
+                            <td>{{ tratamientoP[5] }}</td> 
+                            <td>{{ tratamiento[1] }}</td> 
+                            <td>{{ tratamientoP[4] }}</td> 
+                            <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detallesTratamiento">Ver Detalles</a><a class="btn btn-danger" href="/borraraTratamientoPaciente/{{ tratamientoP[0] }}/{{ paciente[0] }}"><i class="bi bi-trash"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
         </div>
     </div>
-    <!-- MODAL AGREGAR TRATAMIENTOS AL PACIENTE -->
-    <div class="modal fade" id="agregarTratamiento" tabindex="-1" aria-labelledby="agregarTratamiento" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agregarHabilidadLabel">Agregar Tratamiento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="agregarTratamientoForm" method="POST" action="#">
-                        <div class="mb-3">
-                            <label for="nombreTratamiento" class="form-label">Nombre del Tratamiento:</label>
-                            <input type="text" class="form-control" id="nombreTratamiento" name="nombreTratamiento" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edadPaciente" class="form-label">Número de Sesiones:</label>
-                            <input type="number" class="form-control" id="numSesiones" name="numSesiones" min="1" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="fechaTrat" class="form-label">Fecha del Tratamiento:</label>
-                            <input type="date" class="form-control" id="fechaTrat" name="fechaTrat" required />
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="submit" class="btn btn-success">Agregar Tratamiento</button>
-                        </div>
+</div>
+<!-- MODAL AGREGAR TRATAMIENTOS AL PACIENTE -->
+<div class="modal fade" id="agregarTratamiento" tabindex="-1" aria-labelledby="agregarTratamiento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarTratamientoLabel">Agregar Tratamiento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="agregarTratamientoForm" action="/agregarTratamiento" method="POST">
+                    <div class="mb-3">
+                        <label for="nombreTratamiento" class="form-label">Nombre Tratamiento:</label>
+                        <select class="form-select" id="nombreTratamiento" name="nombreTratamiento">
+                            {% for tratamientos in tratamientosT %}
+                                <option value="{{ tratamientos[0] }}">{{ tratamientos[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="numSesiones" class="form-label">Número de Sesiones:</label>
+                        <input type="number" class="form-control" id="numSesiones" name="numSesiones" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaTrat" class="form-label">Fecha del Tratamiento:</label>
+                        <input type="date" class="form-control" id="fechaTrat" name="fechaTrat" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="esteticista" class="form-label">Nombre Esteticista:</label>
+                        <select class="form-select" id="esteticista" name="esteticista">
+                            {% for esteticista in esteticistas %}
+                                <option value="{{ esteticista[0] }}">{{ esteticista[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones:</label>
+                        <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+                    </div>
+                    <div class="d-none">
+                        <input type="text" class="form-control" id="idPaciente" name="idPaciente" value="{{ paciente[0] }}" />
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-success">Agregar Tratamiento</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- MODAL PARA FIRMAR -->
-    <div class="modal fade" id="agregarTratamiento" tabindex="-1" aria-labelledby="agregarTratamiento" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="agregarHabilidadLabel">Agregar Paciente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="agregarTratamientoForm" method="POST" action="#">
-                    
-                </div>
+</div>
+<!-- MODAL PARA FIRMAR -->
+<div class="modal fade" id="detallesTratamiento" tabindex="-1" aria-labelledby="detallesTratamiento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarHabilidadLabel">Tratamiento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="detallesTratamientoForm" method="POST" action="#">
+                
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-</body>
-</html>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+{% endblock %}
