@@ -4,3 +4,7 @@ var signaturePad = new SignaturePad(canvas);
 document.getElementById('clear').addEventListener('click', function () {
     signaturePad.clear();
 });})
+
+function imprimir() {
+    window.print();
+}

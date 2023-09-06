@@ -30,3 +30,28 @@ canvas {
     display: block;
     margin: 20px auto;
 }
+#btnimprimir {
+    position: absolute;  /* Establecer posición absoluta */
+    top: 25px;          /* 10px desde el borde superior */
+    right: 25px;        /* 10px desde el borde derecho */
+}
+@media print {
+    body, .contenedor, .carta, .card, .card-body {
+        display: block;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+        background-color: white;
+        overflow: visible !important;  /* Establecer overflow como visible en caso de que esté definido de otra manera */
+        margin: 0;  /* Remover margenes para impresión */
+        padding: 0;  /* Remover padding para impresión */
+        position: static !important;  /* Establecer posición como estática en caso de que esté definida de otra manera */
+    }
+
+    /* Oculta otros elementos que no quieres imprimir */
+    #btnimprimir {
+        display: none;
+    }
+
+    /* Aquí puedes agregar otras reglas para ocultar otros elementos específicos si es necesario */
+}
