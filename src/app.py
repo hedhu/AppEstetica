@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,jsonify
 from flask_mysqldb import MySQL
-
+import os
+import base64
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'abc.123'
-app.config['MYSQL_DB'] = 'pruebas'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'estetica'
 
 mysql = MySQL(app)
 
@@ -129,10 +130,10 @@ def agregarTratamiento():
         fechaTrat = request.form['fechaTrat']
         numSesiones = request.form['numSesiones']
         esteticista = request.form['esteticista']
-        observaciones = request.form['observaciones']
+        # observaciones = request.form['observaciones']
         conn = mysql.connection
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO tratamientospacientes (idTratamientos, idPaciente, idEsteticista, fechaTratamiento, numSesiones, observaciones) VALUES (%s, %s, %s, %s, %s, %s)', (nombreTratamiento, idPaciente, esteticista, fechaTrat, numSesiones, observaciones))
+        cursor.execute('INSERT INTO tratamientospacientes (idTratamientos, idPaciente, idEsteticista, fechaTratamiento, numSesiones) VALUES (%s, %s, %s, %s, %s)', (nombreTratamiento, idPaciente, esteticista, fechaTrat, numSesiones))
         mysql.connection.commit()
         cursor.close()
         return redirect(url_for('detallesPaciente', id=idPaciente))
@@ -196,6 +197,26 @@ def agregarFirma():
 #         cursor.close()
 #         return redirect(url_for('tratamientos'))
 
+
+@app.route('/saveSignature', methods=['POST'])
+def save_signature():
+    try:
+        data = request.json
+        image_data = data["image"].split(';base64,').pop()
+        
+        # Crear las carpetas si no existen
+        if not os.path.exists('img/firmas'):
+            os.makedirs('img/firmas')
+        
+        file_path = os.path.join('img', 'firmas', f'firma_{os.urandom(8).hex()}.png')
+        
+        with open(file_path, "wb") as f:
+            f.write(base64.b64decode(image_data))
+        
+        return jsonify(success=True)
+    except Exception as e:
+        print(e)
+        return jsonify(success=False)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

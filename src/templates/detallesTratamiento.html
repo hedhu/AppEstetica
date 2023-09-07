@@ -2,7 +2,8 @@
 
 
 {% block customCSSyJs %}
-    <script src="{{ url_for('static', filename='js/firmar.js') }}"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/firmar.css') }}">
 {% endblock %}
 
@@ -66,8 +67,9 @@
                     <div class="form-group mt-4">
                         <label for='signature-pad'>Firma:</label>
                         <canvas id="signature-pad" name='signaturePad' width="400px" height="200"></canvas>
-                        <a class="btn btn-light" id="clear">Limpiar Firma</a>
-                        <a class="btn btn-success" id="clear" onclick='Firmar()'>Firmar</a>
+                        <a class="btn btn-light" id="clearPad">Limpiar Firma</a>
+                        <a class="btn btn-success" id="saveSignature">Firmar</a>
+
                     </div>
                 </form>
             </div>
@@ -78,5 +80,5 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script src="{{ url_for('static', filename='js/firmar.js') }}"></script>  
 {% endblock %}
