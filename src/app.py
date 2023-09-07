@@ -5,8 +5,8 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'estetica'
+app.config['MYSQL_PASSWORD'] = 'abc.123'
+app.config['MYSQL_DB'] = 'pruebas'
 
 mysql = MySQL(app)
 
@@ -102,8 +102,6 @@ def detallesPaciente(id):
             tratamientos.append(tratamiento)
     
     data = [(tratamientoP, tratamiento) for tratamientoP, tratamiento in zip(tratamientosP, tratamientos)]
-    print(data)
-
 
     cursor.execute('SELECT * FROM tratamientos')
     tratamientosT = cursor.fetchall()
@@ -143,7 +141,7 @@ def agregarTratamientos():
         cursor.close()
         return redirect(url_for('tratamientos'))
 
-@app.route('/borraraTratamientoPaciente/<string:idTratamiento>/<string:idPaciente>')
+@app.route('/borrarTratamientoPaciente/<string:idTratamiento>/<string:idPaciente>')
 def borrarTratamientoP(idTratamiento, idPaciente):
     conn = mysql.connection
     cursor = conn.cursor()
@@ -151,6 +149,44 @@ def borrarTratamientoP(idTratamiento, idPaciente):
     mysql.connection.commit()
     cursor.close()
     return redirect(url_for('detallesPaciente', id=idPaciente))
+
+@app.route('/detallesTratamiento/<string:idTratamiento>/<string:idPaciente>')
+def detallesTratamiento(idTratamiento, idPaciente):
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idTratamiento, idPaciente))
+    tratamientoSeleccionado = cursor.fetchone()
+    print(tratamientoSeleccionado)
+    cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+    esteticista = cursor.fetchone()
+    print(esteticista)
+    try:
+        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0])))
+        firmasPacientes = cursor.fetchone()
+        print(firmasPacientes)
+    except:
+        firmasPacientes = [None, None, None, None]
+    cursor.close()
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+
+@app.route('/agregarFirma', methods=['POST', 'GET'])
+def agregarFirma():
+    if request.method == 'POST':
+        firma = request.form['signaturePad']
+        print(firma)
+        return 'recivido'
+
+# @app.route('/agregarTratamientos', methods = ['POST', 'GET'])
+# def agregarTratamientos():
+#     if request.method == 'POST':
+#         nombreTratamiento = request.form['nombreTratamiento']
+#         conn = mysql.connection
+#         cursor = conn.cursor()
+#         cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
+#         mysql.connection.commit()
+#         cursor.close()
+#         return redirect(url_for('tratamientos'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -29,7 +29,6 @@ CREATE TABLE `tratamientospacientes` (
   `idEsteticista` int NOT NULL,
   `fechaTratamiento` varchar(20) NOT NULL,
   `numSesiones` int NOT NULL,
-  `observaciones` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idtratamientosPacientes`),
   KEY `idTratamientos_fk_idx` (`idTratamientos`),
   KEY `idPaciente_fk_idx` (`idPaciente`),
@@ -46,7 +45,7 @@ CREATE TABLE `tratamientospacientes` (
 
 LOCK TABLES `tratamientospacientes` WRITE;
 /*!40000 ALTER TABLE `tratamientospacientes` DISABLE KEYS */;
-INSERT INTO `tratamientospacientes` VALUES (9,3,16,1,'2023-09-26',2,''),(11,1,16,1,'2023-09-23',8,''),(12,29,16,1,'2023-09-14',2,'');
+INSERT INTO `tratamientospacientes` VALUES (9,3,16,1,'2023-09-26',2),(11,1,16,1,'2023-09-23',8),(12,29,16,1,'2023-09-14',2);
 /*!40000 ALTER TABLE `tratamientospacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-04 15:42:55
+-- Dump completed on 2023-09-07 16:18:37

@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 25%, transparent 26%),radial-gradient(circle at bottom left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at bottom right, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top right, rgba(0,0,0,0.1) 12%, transparent 13%);
+    background-size: 1em 1em;
+    background-color: #dee2e6;
+}
+
+.return {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 3%;
+    margin-top: 3%;
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+}
+
+.carta {
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+    border-radius: 30px;
+}
+
+canvas {
+    border: 1px solid black;
+    display: block;
+    margin: 20px auto;
+}

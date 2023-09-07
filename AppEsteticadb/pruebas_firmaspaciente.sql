@@ -16,30 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `firmasspaciente`
+-- Table structure for table `firmaspaciente`
 --
 
-DROP TABLE IF EXISTS `firmasspaciente`;
+DROP TABLE IF EXISTS `firmaspaciente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `firmasspaciente` (
-  `idsesionesPaciente` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `firmaspaciente` (
+  `idFirmasPaciente` int NOT NULL AUTO_INCREMENT,
   `idTratamientosPaciente` int NOT NULL,
+  `idPaciente` int NOT NULL,
   `firmas` int DEFAULT NULL,
   `rutaFirma` varchar(175) DEFAULT NULL,
-  PRIMARY KEY (`idsesionesPaciente`),
+  `numeroSesion` int DEFAULT NULL,
+  `fechaSesion` varchar(45) DEFAULT NULL,
+  `observacionesSesion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idFirmasPaciente`),
   KEY `idTratamientosPaciente_fk_idx` (`idTratamientosPaciente`),
+  KEY `idPacientes_fk_idx` (`idPaciente`),
   CONSTRAINT `idTratamientosPaciente_fk` FOREIGN KEY (`idTratamientosPaciente`) REFERENCES `tratamientospacientes` (`idtratamientosPacientes`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `firmasspaciente`
+-- Dumping data for table `firmaspaciente`
 --
 
-LOCK TABLES `firmasspaciente` WRITE;
-/*!40000 ALTER TABLE `firmasspaciente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `firmasspaciente` ENABLE KEYS */;
+LOCK TABLES `firmaspaciente` WRITE;
+/*!40000 ALTER TABLE `firmaspaciente` DISABLE KEYS */;
+INSERT INTO `firmaspaciente` VALUES (1,9,16,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `firmaspaciente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-04 15:42:55
+-- Dump completed on 2023-09-07 16:18:37
