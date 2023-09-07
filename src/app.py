@@ -53,14 +53,23 @@ def tratamientos():
     ntratamientos = len(tratamientos)
     return render_template('tratamientos.html', ntratamientos=ntratamientos, tratamientos=tratamientos)
 
-@app.route('/buscador')
+@app.route('/buscador', methods=['GET'])
 def buscador():
     conn = mysql.connection
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM pacientes')
+    
+    search_query = request.args.get('buscador')
+    if search_query:
+        # Use the LIKE keyword to search for patients
+        cursor.execute('SELECT * FROM pacientes WHERE nombrePaciente LIKE %s', ('%' + search_query + '%',))
+    else:
+        cursor.execute('SELECT * FROM pacientes')
+        
     pacientes = cursor.fetchall()
     npacientes = len(pacientes)
+    cursor.close()
     return render_template('buscador.html', npacientes=npacientes, pacientes=pacientes)
+
 
 @app.route('/agregarPaciente', methods = ['POST', 'GET'])
 def agregarPaciente():
