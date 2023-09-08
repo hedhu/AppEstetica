@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,jsonify
 from flask_mysqldb import MySQL
-
+import os
+import base64
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'abc.123'
-app.config['MYSQL_DB'] = 'pruebas'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'estetica'
 
 mysql = MySQL(app)
 
@@ -248,6 +249,34 @@ def agregarFirma():
         firma = request.form['signaturePad']
         print(firma)
         return 'recivido'
+
+
+@app.route('/saveSignature', methods=['POST'])
+def save_signature():
+    try:
+        data = request.json
+        image_data = data["image"].split(';base64,').pop()
+        
+        # Crear las carpetas si no existen
+        if not os.path.exists('src/static/img/firmas'):
+            os.makedirs('src/static/img/firmas')
+        
+        file_path = os.path.join('src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
+        urlimg=os.path.basename(file_path)
+
+        print(urlimg)
+        with open(file_path, "wb") as f:
+            f.write(base64.b64decode(image_data))
+        # conn = mysql.connection
+        # cursor = conn.cursor()
+        # cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s WHERE idtratamientos = %s', (urlimg, data["treatment_id"]))
+        # conn.commit()
+        # cursor.close()
+
+        return jsonify(success=True)
+    except Exception as e:
+        print(e)
+        return jsonify(success=False)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
