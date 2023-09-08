@@ -14,54 +14,66 @@
                 <i class="fas fa-home"></i> Home
             </a>            
             <div id="btnimprimir">
-                <button class="btn btn-success" onclick="imprimir()">Imprimir</button>
+                <button class="btn btn-primary" onclick="imprimir()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
             </div>
           <h4 class="card-title text-center">Ficha Paciente: {{ paciente[1] }}</h4>
-          <form class="p-3" method="POST" action="#">
+          <form class="p-3" action="/actualizarPaciente/{{ paciente[0] }}" method="POST">
+            <div class="d-flex justify-content-end">
+                <a class='btn btn-warning' id="activar" onclick='activar()'>
+                    <i class="bi bi-pencil-square"></i> Editar
+                </a>
+                <div class="d-none" id="guardar">
+                    <button class='btn btn-success'>
+                        <i class="bi bi-save2"></i> Guardar
+                    </button>
+                </div>
+            </div>
             <div class="mb-3">
                 <label for="nombrePaciente" class="form-label">Nombre Completo:</label>
-                <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="{{ paciente[1] }}" required>
+                <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" class="inputs" value="{{ paciente[1] }}" required disabled>
             </div>
             <div class="row">
                 <div class="mb-3 col-6">
                     <label for="edadPaciente" class="form-label">Edad:</label>
-                    <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" value="{{ paciente[2] }}" required>
+                    <input type="number" class="form-control" id="edadPaciente" name="edadPaciente" class="inputs" value="{{ paciente[2] }}" required disabled>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="fechaNac" class="form-label">Fecha de Nacimiento:</label>
-                    <input type="date" class="form-control" id="fechaNac" name="fechaNac" value="{{ paciente[3] }}" required>
+                    <input type="date" class="form-control" id="fechaNac" name="fechaNac" class="inputs" value="{{ paciente[3] }}" required disabled>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="telPaciente" class="form-label">Teléfono:</label>
-                <input type="tel" class="form-control" id="telPaciente" name="telPaciente" value="{{ paciente[4] }}" required>
+                <input type="tel" class="form-control" id="telPaciente" name="telPaciente" class="inputs" value="{{ paciente[4] }}" required disabled>
             </div>
             <div class="mb-3">
                 <label for="ocupacion" class="form-label">Ocupación:</label>
-                <input type="text" class="form-control" id="ocupacion" name="ocupacion" value="{{ paciente[5] }}">
+                <input type="text" class="form-control" id="ocupacion" name="ocupacion" class="inputs" value="{{ paciente[5] }}" disabled>
             </div>
             <div class="row">
                 <div class="mb-3 col-6">
                     <label for="enfermedades" class="form-label">Enfermedades:</label>
-                    <input type="text" class="form-control" id="enfermedades" name="enfermedades" value="{{ paciente[6] }}"/>
+                    <input type="text" class="form-control" id="enfermedades" name="enfermedades" class="inputs" value="{{ paciente[6] }}" disabled/>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="enfermedadesCro" class="form-label">Enfermedades crónicas:</label>
-                    <input type="text" class="form-control" id="enfermedadesCro" name="enfermedadesCro" value="{{ paciente[7] }}" />
+                    <input type="text" class="form-control" id="enfermedadesCro" name="enfermedadesCro" class="inputs" value="{{ paciente[7] }}" disabled/>
                 </div>
             </div>
             <div class="mb-3 ">
                 <label for="medicamentos" class="form-label">Medicamentos que toma actualmente:</label>
-                <input type="text" class="form-control" id="medicamentos" name="medicamentos" value="{{ paciente[8] }}" />
+                <input type="text" class="form-control" id="medicamentos" name="medicamentos" class="inputs" value="{{ paciente[8] }}" disabled/>
             </div>
             <div class="row">
                 <div class="mb-3 col-6">
                     <label for="alergias" class="form-label">Alergias:</label>
-                    <input type="text" class="form-control" id="alergias" name="alergias" value="{{ paciente[9] }}" />
+                    <input type="text" class="form-control" id="alergias" name="alergias" class="inputs" value="{{ paciente[9] }}" disabled/>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="implatesDispositivos" class="form-label">Implantes o dispositivos:</label>
-                    <input type="text" class="form-control" id="implatesDispositivos" name="implatesDispositivos" value="{{ paciente[10] }}" />
+                    <input type="text" class="form-control" id="implatesDispositivos" name="implatesDispositivos" class="inputs" value="{{ paciente[10] }}" disabled/>
                 </div>
             </div>
           </form>
@@ -85,7 +97,7 @@
                             <td>{{ tratamientoP[5] }}</td> 
                             <td>{{ tratamiento[1] }}</td> 
                             <td>{{ tratamientoP[4] }}</td> 
-                            <td><a class="btn btn-success" href="/detallesTratamiento/{{ tratamientoP[1] }}/{{ paciente[0] }}">Ver Detalles</a><a class="btn btn-danger" href="/borrarTratamientoPaciente/{{ tratamientoP[1] }}/{{ paciente[0] }}"><i class="bi bi-trash"></i></a></td>
+                            <td><a class="btn btn-success me-1" href="/detallesTratamiento/{{ tratamientoP[1] }}/{{ paciente[0] }}"><i class="bi bi-eye"></i></a><a class="btn btn-danger" href="/borrarTratamientoPaciente/{{ tratamientoP[1] }}/{{ paciente[0] }}"><i class="bi bi-trash"></i></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -128,10 +140,6 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="observaciones" class="form-label">Observaciones:</label>
-                        <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
-                    </div>
                     <div class="d-none">
                         <input type="text" class="form-control" id="idPaciente" name="idPaciente" value="{{ paciente[0] }}" />
                     </div>
@@ -144,8 +152,4 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 {% endblock %}

@@ -53,6 +53,49 @@ def tratamientos():
     ntratamientos = len(tratamientos)
     return render_template('tratamientos.html', ntratamientos=ntratamientos, tratamientos=tratamientos)
 
+@app.route('/agregarTratamientos', methods = ['POST', 'GET'])
+def agregarTratamientos():
+    if request.method == 'POST':
+        nombreTratamiento = request.form['nombreTratamiento']
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('tratamientos'))
+
+@app.route('/borrarTratamiento/<string:idTratamiento>')
+def borrarTratamiento(idTratamiento):
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM tratamientos WHERE idTratamiento = (%s)', (idTratamiento,))
+    mysql.connection.commit()
+    cursor.close()
+    return redirect(url_for('tratamientos'))
+
+@app.route('/esteticistas', methods = ['POST', 'GET'])
+def esteticistas():
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM esteticistas')
+    esteticistas = cursor.fetchall()
+    cursor.close()
+    nesteticistas = len(esteticistas)
+    return render_template('esteticistas.html', nesteticistas=nesteticistas, esteticistas=esteticistas)
+
+@app.route('/agregarEsteticistas', methods = ['POST', 'GET'])
+def agregarEsteticistas():
+    if request.method == 'POST':
+        nombreEsteticista = request.form['nombreEsteticista']
+        correoEsteticista = request.form['correoEsteticista']
+        telEsteticista = request.form['telEsteticista']
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO esteticistas (nombreEsteticista, correoEsteticista, telefonoEsteticista) VALUES (%s, %s, %s)', (nombreEsteticista, correoEsteticista, telEsteticista))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('esteticistas'))
+
 @app.route('/buscador', methods=['GET'])
 def buscador():
     conn = mysql.connection
@@ -118,8 +161,41 @@ def detallesPaciente(id):
     cursor.execute('SELECT * FROM esteticistas')
     esteticistas = cursor.fetchall()
     
+    paciente = list(paciente) 
+
+    for i in range(1, len(paciente)):
+        if paciente[i] is None:
+            paciente[i] = ''
+        else:
+            pass
+
+    paciente = tuple(paciente)  
+
     cursor.close()
     return render_template('detallesPaciente.html', data=data, paciente=paciente, tratamientosT=tratamientosT, esteticistas=esteticistas)
+
+@app.route('/actualizarPaciente/<string:idPaciente>', methods = ['POST', 'GET', 'PUT'])
+def actualizarPaciente(idPaciente):
+    if request.method == 'POST':
+        nombrePaciente = request.form['nombrePaciente']
+        edadPaciente = request.form['edadPaciente']
+        fechaNac = request.form['fechaNac']
+        telPaciente = request.form['telPaciente']
+        ocupacion = request.form['ocupacion']
+        enfermedades = request.form['enfermedades']
+        enfermedadesCro = request.form['enfermedadesCro']
+        medicamentos = request.form['medicamentos']
+        alergias = request.form['alergias']
+        implatesDispositivos = request.form['implatesDispositivos']
+        conn = mysql.connection
+        cursor = conn.cursor()
+        p = cursor.execute('UPDATE pacientes SET nombrePaciente = %s, edadPaciente = %s, fechaNacimiento = %s, Telefono = %s, Ocupacion = %s, Enfermedades = %s, EnfermedadesCronicas = %s, Medicamentos = %s, Alergias = %s, Implantes_Dispositivos = %s WHERE idPacientes = %s', (nombrePaciente, edadPaciente, fechaNac, telPaciente, ocupacion, enfermedades, enfermedadesCro, medicamentos, alergias, implatesDispositivos, idPaciente))
+        print(p)
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('detallesPaciente', id=idPaciente))
+    else:
+        return redirect(url_for('detallesPaciente', id=idPaciente))
 
 @app.route('/agregarTratamiento', methods = ['POST', 'GET'])
 def agregarTratamiento():
@@ -129,26 +205,14 @@ def agregarTratamiento():
         fechaTrat = request.form['fechaTrat']
         numSesiones = request.form['numSesiones']
         esteticista = request.form['esteticista']
-        observaciones = request.form['observaciones']
         conn = mysql.connection
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO tratamientospacientes (idTratamientos, idPaciente, idEsteticista, fechaTratamiento, numSesiones, observaciones) VALUES (%s, %s, %s, %s, %s, %s)', (nombreTratamiento, idPaciente, esteticista, fechaTrat, numSesiones, observaciones))
+        cursor.execute('INSERT INTO tratamientospacientes (idTratamientos, idPaciente, idEsteticista, fechaTratamiento, numSesiones) VALUES (%s, %s, %s, %s, %s)', (nombreTratamiento, idPaciente, esteticista, fechaTrat, numSesiones))
         mysql.connection.commit()
         cursor.close()
         return redirect(url_for('detallesPaciente', id=idPaciente))
     else:
         return redirect(url_for('detallesPaciente', id=idPaciente))
-
-@app.route('/agregarTratamientos', methods = ['POST', 'GET'])
-def agregarTratamientos():
-    if request.method == 'POST':
-        nombreTratamiento = request.form['nombreTratamiento']
-        conn = mysql.connection
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
-        mysql.connection.commit()
-        cursor.close()
-        return redirect(url_for('tratamientos'))
 
 @app.route('/borrarTratamientoPaciente/<string:idTratamiento>/<string:idPaciente>')
 def borrarTratamientoP(idTratamiento, idPaciente):
@@ -184,18 +248,6 @@ def agregarFirma():
         firma = request.form['signaturePad']
         print(firma)
         return 'recivido'
-
-# @app.route('/agregarTratamientos', methods = ['POST', 'GET'])
-# def agregarTratamientos():
-#     if request.method == 'POST':
-#         nombreTratamiento = request.form['nombreTratamiento']
-#         conn = mysql.connection
-#         cursor = conn.cursor()
-#         cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
-#         mysql.connection.commit()
-#         cursor.close()
-#         return redirect(url_for('tratamientos'))
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

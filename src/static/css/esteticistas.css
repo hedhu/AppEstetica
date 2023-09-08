@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 25%, transparent 26%),radial-gradient(circle at bottom left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at bottom right, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top left, rgba(0,0,0,0.1) 12%, transparent 13%),radial-gradient(circle at top right, rgba(0,0,0,0.1) 12%, transparent 13%);
+    background-size: 1em 1em;
+    background-color: #dee2e6;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;    
+}
+
+.esteticistas {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+}

@@ -29,7 +29,11 @@
             {% for sesion in range(1, tratamientoSeleccionado[6] + 1) %}
               <tr>
                 <td>{{ sesion }}</td>
-                <td><input type="date" class="form-control" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
+                {% if sesion == 1 %}
+                    <td>{{ tratamientoSeleccionado[5] }}</td>
+                {% else %}
+                    <td><input type="date" class="form-control" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
+                {% endif %}
                 <td>
                     <ul>
                         <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>

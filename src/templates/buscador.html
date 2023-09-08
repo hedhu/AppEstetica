@@ -7,6 +7,9 @@
     
 {% block content %}
 <div class="buscar">
+    <div class="logOut">
+        <a class="btn btn-outline-secondary active" role="button" data-bs-toggle="button" aria-pressed="true"><i class="bi bi-box-arrow-left"></i></a>
+    </div>
     <form  method="get" class="searchBar mt-2">
         <input type="text" placeholder="Buscar Paciente..." name="buscador"/>
         <button type="submit"><img src="{{ url_for('static', filename='img/search.png') }}"/></button>
@@ -46,7 +49,7 @@
                     <td>{{ paciente[3] }}</td> 
                     <td>{{ paciente[4] }}</td> 
                     <td><a href="detallesPaciente/{{ paciente[0] }}" class="btn btn-success">Ver Detalles</a></td> 
-                </a<>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
