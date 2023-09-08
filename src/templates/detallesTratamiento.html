@@ -35,18 +35,19 @@
                     <ul>
                         <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>
                         <li>Nombre Esteticista: {{ esteticista[0] }}</li>
-                        {% if firmasPacientes[6] == None %}
+                        {% if firmasPacientes[7] == None %}
                             <li>No se encontraron observaciones para este paciente.</li>
                         {% else %}
-                            <li>Observaciones: {{ firmasPacientes[6] }}</li>
+                            <li>Observaciones: {{ firmasPacientes[7] }}</li>
                         {% endif %}
                     </ul>
                 </td>
-                {% if firmasPacientes[3] == None %}
-                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a></td>
+                {% if firmasPacientes[4] == None %}
+                    <td><img src="{{ url_for('static', filename='/img/firmas/{{firmasPacientes[4]}}') }}"/></td>
                 {% else %}
-                    <td>Firmado</td>
+                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar" data-treatment-id="{{ tratamientoSeleccionado[2] }}">Firmar</a></td>
                 {% endif %}
+
               </tr>
             {% endfor %}
           </tbody>

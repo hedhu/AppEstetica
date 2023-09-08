@@ -186,17 +186,6 @@ def agregarFirma():
         print(firma)
         return 'recivido'
 
-# @app.route('/agregarTratamientos', methods = ['POST', 'GET'])
-# def agregarTratamientos():
-#     if request.method == 'POST':
-#         nombreTratamiento = request.form['nombreTratamiento']
-#         conn = mysql.connection
-#         cursor = conn.cursor()
-#         cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
-#         mysql.connection.commit()
-#         cursor.close()
-#         return redirect(url_for('tratamientos'))
-
 
 @app.route('/saveSignature', methods=['POST'])
 def save_signature():
@@ -205,14 +194,21 @@ def save_signature():
         image_data = data["image"].split(';base64,').pop()
         
         # Crear las carpetas si no existen
-        if not os.path.exists('img/firmas'):
-            os.makedirs('img/firmas')
+        if not os.path.exists('src/static/img/firmas'):
+            os.makedirs('src/static/img/firmas')
         
-        file_path = os.path.join('img', 'firmas', f'firma_{os.urandom(8).hex()}.png')
-        
+        file_path = os.path.join('src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
+        urlimg=os.path.basename(file_path)
+
+        print(urlimg)
         with open(file_path, "wb") as f:
             f.write(base64.b64decode(image_data))
-        
+        # conn = mysql.connection
+        # cursor = conn.cursor()
+        # cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s WHERE idtratamientos = %s', (urlimg, data["treatment_id"]))
+        # conn.commit()
+        # cursor.close()
+
         return jsonify(success=True)
     except Exception as e:
         print(e)
