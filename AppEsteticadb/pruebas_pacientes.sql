@@ -35,7 +35,7 @@ CREATE TABLE `pacientes` (
   `Alergias` varchar(120) DEFAULT NULL,
   `Implantes_Dispositivos` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`idPacientes`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `pacientes` (
 
 LOCK TABLES `pacientes` WRITE;
 /*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
-INSERT INTO `pacientes` VALUES (11,'Eduardo Gallardo',19,'1112-02-07','12312321',NULL,NULL,NULL,NULL,NULL,NULL),(12,'Julio Bascuñan',38,'2832-03-08','23423',NULL,NULL,NULL,NULL,NULL,NULL),(16,'Pancho Villa',35,'2023-05-10','9435345','Chofer','','','ibuprofeno','','');
+INSERT INTO `pacientes` VALUES (11,'Eduardo Gallardo',19,'1112-02-07','12312321','Electricista','','','','',''),(12,'Julio Bascuñan',38,'2832-03-08','23423',NULL,NULL,NULL,NULL,NULL,NULL),(16,'Pancho Villa',35,'2023-05-10','9435345','Chofer','','','ibuprofeno','',''),(17,'Pedrito Juarez',34,'2023-09-11','2453345466','Chofer','Diarrea','Austismo','ibuprofeno','',''),(18,'Pedrito Nuñez',34,'2023-05-03','54657567','','','Austismo','ibuprofeno','A todo','');
 /*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-07 16:18:36
+-- Dump completed on 2023-09-09 17:56:48

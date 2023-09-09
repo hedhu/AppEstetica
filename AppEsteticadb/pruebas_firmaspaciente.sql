@@ -35,7 +35,7 @@ CREATE TABLE `firmaspaciente` (
   KEY `idTratamientosPaciente_fk_idx` (`idTratamientosPaciente`),
   KEY `idPacientes_fk_idx` (`idPaciente`),
   CONSTRAINT `idTratamientosPaciente_fk` FOREIGN KEY (`idTratamientosPaciente`) REFERENCES `tratamientospacientes` (`idtratamientosPacientes`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `firmaspaciente` (
 
 LOCK TABLES `firmaspaciente` WRITE;
 /*!40000 ALTER TABLE `firmaspaciente` DISABLE KEYS */;
-INSERT INTO `firmaspaciente` VALUES (1,9,16,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `firmaspaciente` VALUES (2,13,11,1,'firma_9c01b487e71b30b3.png',1,'2023-09-22',NULL),(3,13,11,NULL,NULL,2,NULL,NULL),(4,13,11,NULL,NULL,3,NULL,NULL),(5,13,11,NULL,NULL,4,NULL,NULL),(6,14,11,NULL,NULL,1,'2023-09-23',NULL),(7,14,11,NULL,NULL,2,NULL,NULL),(8,16,11,NULL,NULL,1,'2023-09-16',NULL),(9,16,11,NULL,NULL,2,NULL,NULL),(10,16,11,NULL,NULL,3,NULL,NULL),(11,16,11,NULL,NULL,4,NULL,NULL),(12,16,11,NULL,NULL,5,NULL,NULL),(13,17,11,1,'firma_e3bcc474bdd2e628.png',1,'2023-09-23','yuiy'),(14,17,11,NULL,NULL,2,NULL,NULL),(15,17,11,NULL,NULL,3,'2023-11-23','fhfghfghfhfghfgh tanto tanto'),(16,18,18,1,'firma_8a0d9fb42caa9876.png',1,'2023-09-22','pedrito es muy molesto'),(17,18,18,1,'firma_30ab46d815b9390e.png',2,'2023-09-14','uiuiuiuiu'),(18,18,18,1,'firma_8c9d253ee39f9ddd.png',3,'2023-09-30','aun\r\ns');
 /*!40000 ALTER TABLE `firmaspaciente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-07 16:18:37
+-- Dump completed on 2023-09-09 17:56:47

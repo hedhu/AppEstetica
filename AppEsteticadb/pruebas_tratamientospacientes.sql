@@ -36,7 +36,7 @@ CREATE TABLE `tratamientospacientes` (
   CONSTRAINT `idEsteticistas_fk` FOREIGN KEY (`idEsteticista`) REFERENCES `esteticistas` (`idEsteticistas`),
   CONSTRAINT `idPaciente_fk` FOREIGN KEY (`idPaciente`) REFERENCES `pacientes` (`idPacientes`),
   CONSTRAINT `idTratamientos_fk` FOREIGN KEY (`idTratamientos`) REFERENCES `tratamientos` (`idTratamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `tratamientospacientes` (
 
 LOCK TABLES `tratamientospacientes` WRITE;
 /*!40000 ALTER TABLE `tratamientospacientes` DISABLE KEYS */;
-INSERT INTO `tratamientospacientes` VALUES (9,3,16,1,'2023-09-26',2),(11,1,16,1,'2023-09-23',8),(12,29,16,1,'2023-09-14',2);
+INSERT INTO `tratamientospacientes` VALUES (9,3,16,1,'2023-09-26',2),(11,1,16,1,'2023-09-23',8),(12,29,16,1,'2023-09-14',2),(13,1,11,1,'2023-09-22',4),(14,29,11,2,'2023-09-23',2),(16,28,11,2,'2023-09-16',5),(17,32,11,1,'2023-09-23',3),(18,2,18,2,'2023-09-22',3);
 /*!40000 ALTER TABLE `tratamientospacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-07 16:18:37
+-- Dump completed on 2023-09-09 17:56:47
