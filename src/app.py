@@ -280,8 +280,6 @@ def save_signature():
             return jsonify(success=False, message="treatment_id not provided")
 
         treatment_id = data["treatment_id"]  # Recuperar el valor de treatment_id
-        fechasesion = data["fechasesion"]  
-        obsevaciones = data["observaciones"]
         
         print(data)
         
@@ -308,6 +306,41 @@ def save_signature():
         print(e)
         return jsonify(success=False, message=str(e))
 
+@app.route('/agregarObservacion', methods=['POST', 'GET'])
+def agregarObservacion():
+    idFirmasPaciente = request.form['numSesiones']
+    fechaSesion = request.form.get('fechaSesion', None) 
+    observaciones = request.form['observaciones']
+    idP = request.form['idP']
+    idT = request.form['idT']
+    print(idP)
+    print(idT)
+    if fechaSesion == None:
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('UPDATE firmasPaciente SET observacionesSesion = %s WHERE idFirmasPaciente = %s', (observaciones, idFirmasPaciente))
+        conn.commit()
+        cursor.close()
+    else:
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('UPDATE firmasPaciente SET fechaSesion = %s, observacionesSesion = %s WHERE idFirmasPaciente = %s', (fechaSesion, observaciones, idFirmasPaciente))
+        conn.commit()
+        cursor.close()
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idT, idP))
+    tratamientoSeleccionado = cursor.fetchone()
+    print(tratamientoSeleccionado)
+    cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+    esteticista = cursor.fetchone()
+    print(esteticista)
+    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+    firmasPacientes = cursor.fetchall()
+    print(firmasPacientes)
+    cursor.close()
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+   
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

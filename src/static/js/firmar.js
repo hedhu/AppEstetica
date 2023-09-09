@@ -5,6 +5,61 @@
 //     signaturePad.clear();
 // });})
 
+$(document).ready(function() {
+    $('button[id^="habilitarObservaciones"]').click(function() {
+        var numSesion = $(this).attr('id').replace('habilitarObservaciones', '');
+        $('#observaciones' + numSesion).removeClass('d-none');
+        $(this).addClass('d-none');
+        $('#agregarO' + numSesion).removeClass('d-none');
+        $(this).addClass('d-none');
+    });
+
+    let selectNumSesiones = $('#numSesiones');
+    let inputFechaSesion = $('#fechasesion');
+
+    // Escuchar el evento change del select
+    selectNumSesiones.on('change', function() {
+        let selectedOption = selectNumSesiones.find(':selected');
+        let fechaSesion = selectedOption.data('fecha');
+
+        if (selectedOption.val() !== '1') {
+            inputFechaSesion.prop('disabled', false);
+            inputFechaSesion.val(fechaSesion);
+        } else {
+            inputFechaSesion.prop('disabled', true);
+            inputFechaSesion.val('');
+        }
+    });
+    // $('a[id^="agregarO"]').click(function(event) {
+    //     event.preventDefault(); // Evitar que el enlace redireccione
+
+    //     var numSesion = $(this).attr('id').replace('agregarO', '');
+    //     var observacion = $('#observaciones' + numSesion).val();
+    //     console.log(numSesion);
+    //     console.log(observacion);
+
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/agregarObservacion', // La URL de tu ruta en Flask
+    //         data: {
+    //             treatment_id: numSesion,
+    //             observacion: observacion
+    //         },
+    //         success: function(response) {
+    //             if (response.success) {
+    //                 alert("Observación agregada con éxito.");
+    //                 // Actualiza la página o realiza las acciones necesarias
+    //             } else {
+    //                 alert("Hubo un error al agregar la observación.");
+    //             }
+    //         },
+    //         error: function() {
+    //             alert("Hubo un error en la solicitud.");
+    //         }
+    //     });
+    // });
+});
+
 let canvas = document.getElementById("signature-pad");
 let signaturePad = new SignaturePad(canvas);
 
@@ -17,10 +72,9 @@ document.getElementById("saveSignature").addEventListener("click", function() {
         alert("Por favor, firma antes de guardar.");
     } else {
         let dataURL = signaturePad.toDataURL();
-        let idfirmapaciente = document.getElementById('idfirmapaciente').value;  // Obtener el valor del campo idfirmapaciente
-        let fechasesion = document.getElementById('fechasesion').value;  
-        let observaciones = document.getElementById('observaciones').value;  
-        
+        let idfirmapaciente = document.getElementById('idfirmapaciente').value;
+            
+
         // Enviar la firma al servidor
         fetch('/saveSignature', {
             method: 'POST',
@@ -30,8 +84,6 @@ document.getElementById("saveSignature").addEventListener("click", function() {
             body: JSON.stringify({ 
                 image: dataURL,
                 treatment_id: idfirmapaciente,
-                fechasesion: fechasesion,
-                observaciones: observaciones
             })
         }).then(response => response.json()).then(data => {
             if (data.success) {
@@ -45,6 +97,9 @@ document.getElementById("saveSignature").addEventListener("click", function() {
         });
     }
 });
+
+        
+
 
 function download(dataURL, filename) {
     let blob = dataURLtoBlob(dataURL);
@@ -68,10 +123,3 @@ function dataURLtoBlob(dataURL) {
     }
     return new Blob([new Uint8Array(array)], {type: 'image/png'});
 }
-
-$(document).ready(function() {
-    $('#habilitarObservaciones').click(function() {
-        $('#observaciones').removeClass('d-none');
-        $(this).addClass('d-none');
-    });
-});

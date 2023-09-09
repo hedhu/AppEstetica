@@ -29,10 +29,10 @@
                 </thead>
                 <tbody>
                   {% for firmaPaciente in firmasPacientes %}
-                    <tr>
-                      <td>{{ firmaPaciente[5] }}</td>
+                    <tr class="{{ 'no-firmado' if firmaPaciente[3] == None else '' }}">
+                      <td id="numSesion{{ firmaPaciente[5] }}">{{ firmaPaciente[5] }}</td>
                       {% if firmaPaciente[6] == None %}
-                          <td><input type="date" class="form-control" id="fechasesion" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
+                          <td><input type="date" class="form-control" id="fechasesion{{ firmaPaciente[5] }}" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
                       {% else %}
                           <td>{{ firmaPaciente[6] }}</td>
                       {% endif %}
@@ -41,23 +41,53 @@
                               <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>
                               <li>Nombre Esteticista: {{ esteticista[0] }}</li>
                               {% if firmaPaciente[7] == None %}
-                                  <li>No se encontraron observaciones para este paciente. <button id="habilitarObservaciones" class="btn btn-success"><i class="bi bi-plus"></i></button></li>
-                                  <input type="text" id="observaciones" name="observaciones" class="form-control d-none" placeholder="Agregar observación...">
+                                  <li>No se encontraron observaciones para este paciente.</li>
+                                  <!-- <textarea type="text" id="observaciones{{ firmaPaciente[5] }}" name="observaciones" class="form-control d-none" placeholder="Agregar observación..."></textarea>
+                                  <a id="agregarO{{ firmaPaciente[5] }}" class="btn btn-success d-none" href="/agregarObservacion/{{ firmaPaciente[0] }}">Agregar Observacion</a> -->
                               {% else %}
-                                  <li>Observaciones: {{ firmaPaciente[7] }}</li>
-                              {% endif %}
-                          </input<>
+                                  <li>Observaciones: {{ firmaPaciente[7] }}</li> 
+                              {% endif %} 
+                          </ul>
                       </td>
                       {% if firmaPaciente[3] != None %}
-                          <td><img src="{{ url_for('static', filename='img/firmas/' + firmaPaciente[4]) }}"/></td>
+                          <td class="m-0 p-0"><img width="100%" height="25%" src="{{ url_for('static', filename='img/firmas/' + firmaPaciente[4]) }}"/></td>
                       {% else %}
-                          <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a><input class="d-none" id="idfirmapaciente" value="{{ firmaPaciente[0] }}"></td>
+                          <td><a class="btn btn-success disabled" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a><input class="d-none" id="idfirmapaciente" value="{{ firmaPaciente[0] }}"></td>
                       {% endif %}
                     </tr>
                   {% endfor %}
                 </tbody>
               </table>
         </div>
+        <form id="agregarObservacionForm" action="/agregarObservacion" method="POST">
+            <div class="mb-3">
+                <label for="numSesiones" class="form-label">Nº de Sesion:</label>
+                <select class="form-select" id="numSesiones" name="numSesiones">
+                    {% for firmaPaciente in firmasPacientes %}
+                        <option value="{{ firmaPaciente[0] }}" data-fecha="{{ firmaPaciente[6] }}">{{ firmaPaciente[5] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="fechaSesiones" class="form-label">Fecha de Sesion:</label>
+                <input type="date" class="form-control" id="fechasesion" name="fechaSesion" placeholder="Fecha Sesion.." disabled/>
+            </div>
+            <div class="mb-3">
+                <label for="observaciones" class="form-label">Observaciones:</label>
+                <textarea type="text" id="observaciones" name="observaciones" class="form-control" placeholder="Agregar observación..."></textarea>
+            </div>
+            <div class="mb-3 d-none">
+                <label for="idP" class="form-label">IdPaciente:</label>
+                <input type="text" id="idP" name="idP" class="form-control" placeholder="Agregar observación..." value="{{ tratamientoSeleccionado[2] }}" />
+            </div>
+            <div class="mb-3 d-none">
+                <label for="idT" class="form-label">IdTratamiento:</label>
+                <input type="text" id="idT" name="idT" class="form-control" placeholder="Agregar observación..." value="{{ tratamientoSeleccionado[1] }}" />
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button id="agregarO" class="btn btn-success">Agregar Observacion</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -87,5 +117,14 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+// Habilita el bot贸n Firmar de la primera sesi贸n no firmada
+$(document).ready(function() {
+    let primeraNoFirmada = $('.no-firmado').first();
+    primeraNoFirmada.find('a.btn').removeClass('disabled');
+});
+</script>
+
 <script src="{{ url_for('static', filename='js/firmar.js') }}"></script>  
 {% endblock %}
