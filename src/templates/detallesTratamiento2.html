@@ -27,29 +27,29 @@
             </tr>
           </thead>
           <tbody>
-            {% for firmaPaciente in firmasPacientes %}
+            {% for sesion in range(1, tratamientoSeleccionado[6] + 1) %}
               <tr>
-                <td>{{ firmaPaciente[5] }}</td>
-                {% if firmaPaciente[6] == None %}
-                    <td><input type="date" class="form-control" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
+                <td>{{ sesion }}</td>
+                {% if sesion == 1 %}
+                    <td>{{ tratamientoSeleccionado[5] }}</td>
                 {% else %}
-                    <td>{{ firmaPaciente[6] }}</td>
+                    <td><input type="date" class="form-control" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
                 {% endif %}
                 <td>
                     <ul>
                         <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>
                         <li>Nombre Esteticista: {{ esteticista[0] }}</li>
-                        {% if firmaPaciente[7] == None %}
+                        {% if firmasPacientes[7] == None %}
                             <li>No se encontraron observaciones para este paciente.</li>
                         {% else %}
-                            <li>Observaciones: {{ firmaPaciente[7] }}</li>
+                            <li>Observaciones: {{ firmasPacientes[7] }}</li>
                         {% endif %}
                     </ul>
                 </td>
-                {% if firmaPaciente[4] != None and firmaPaciente[5] == sesion %}
-                    <td><img src="{{ url_for('static', filename='/img/firmas/{{firmaPaciente[4]}}') }}"/></td>
+                {% if firmasPacientes[4] != None and firmasPacientes[5] == sesion %}
+                    <td><img src="{{ url_for('static', filename='/img/firmas/{{firmasPacientes[4]}}') }}"/></td>
                 {% else %}
-                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar" data-treatment-id="{{ firmaPaciente[0] }}">Firmar</a></td>
+                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar" data-treatment-id="{{ tratamientoSeleccionado[2] }}">Firmar</a></td>
                 {% endif %}
 
               </tr>
@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<!-- MODAL PARA FIRMAR -->
+<!-- MODAL AGREGAR TRATAMIENTOS AL PACIENTE -->
 <div class="modal fade" id="firmar" tabindex="-1" aria-labelledby="firmar" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

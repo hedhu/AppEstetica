@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'estetica'
+app.config['MYSQL_PASSWORD'] = 'abc.123'
+app.config['MYSQL_DB'] = 'pruebas'
 
 mysql = MySQL(app)
 
@@ -224,8 +224,28 @@ def borrarTratamientoP(idTratamiento, idPaciente):
     cursor.close()
     return redirect(url_for('detallesPaciente', id=idPaciente))
 
-@app.route('/detallesTratamiento/<string:idTratamiento>/<string:idPaciente>')
+@app.route('/detallesTratamiento/<string:idTratamiento>/<string:idPaciente>', methods=['GET', 'POST'])
 def detallesTratamiento(idTratamiento, idPaciente):
+    idTP = request.args.get('idTP')
+    sesiones = request.args.get('sesiones')
+    fecha = request.args.get('fecha')
+    print(idTP, sesiones, fecha)
+    
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (idTP,))
+    x = cursor.fetchall()
+    if len(x) <= 0:
+        for i in  range(1, int(sesiones)+1):
+            if i == 1:
+                cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion, fechaSesion) VALUES (%s, %s, %s, %s)',(idTP, idPaciente, i, fecha))
+                conn.commit()
+            else:
+                cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion) VALUES (%s, %s, %s)',(idTP, idPaciente, i))
+                conn.commit()
+    else:
+        pass
+    cursor.close()
     conn = mysql.connection
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idTratamiento, idPaciente))
@@ -234,12 +254,9 @@ def detallesTratamiento(idTratamiento, idPaciente):
     cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
     esteticista = cursor.fetchone()
     print(esteticista)
-    try:
-        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0])))
-        firmasPacientes = cursor.fetchone()
-        print(firmasPacientes)
-    except:
-        firmasPacientes = [None, None, None, None]
+    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+    firmasPacientes = cursor.fetchall()
+    print(firmasPacientes)
     cursor.close()
     return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
 
@@ -258,20 +275,22 @@ def save_signature():
         image_data = data["image"].split(';base64,').pop()
         
         # Crear las carpetas si no existen
-        if not os.path.exists('src/static/img/firmas'):
-            os.makedirs('src/static/img/firmas')
+        if not os.path.exists('AppEstetica/src/static/img/firmas'):
+            os.makedirs('AppEstetica/src/static/img/firmas')
         
-        file_path = os.path.join('src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
+        file_path = os.path.join('AppEstetica', 'src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
         urlimg=os.path.basename(file_path)
 
         print(urlimg)
+        
         with open(file_path, "wb") as f:
             f.write(base64.b64decode(image_data))
-        # conn = mysql.connection
-        # cursor = conn.cursor()
-        # cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s WHERE idtratamientos = %s', (urlimg, data["treatment_id"]))
-        # conn.commit()
-        # cursor.close()
+        
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s, firmas = %s WHERE idFirmasPaciente = %s', (urlimg, str(1), data["treatment_id"]))
+        conn.commit()
+        cursor.close()
 
         return jsonify(success=True)
     except Exception as e:
