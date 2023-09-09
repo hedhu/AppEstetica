@@ -6,16 +6,16 @@
 {% endblock %}
     
 {% block content %}
-<div class="buscar">
-    <div class="logOut">
+<div class="buscar d-flex justify-content-around align-items-center w-100 mt-2">
+    <div class="logOut mx-2 mx-md-4">
         <a class="btn btn-outline-secondary active" role="button" data-bs-toggle="button" aria-pressed="true"><i class="bi bi-box-arrow-left"></i></a>
     </div>
-    <form  method="get" class="searchBar mt-2">
+    <form  method="get" class="searchBar">
         <input type="text" placeholder="Buscar Paciente..." name="buscador"/>
         <button type="submit"><img src="{{ url_for('static', filename='img/search.png') }}"/></button>
     </form>
     {% if npacientes > 0 %}
-    <div class="agregar">
+    <div class="agregar mx-2 mx-md-4">
         <button class="boton btn btn-secondary" data-bs-toggle="modal" data-bs-target="#agregarPaciente"><i class="bi bi-plus-lg"></i></button>
     </div>
     {% endif %}

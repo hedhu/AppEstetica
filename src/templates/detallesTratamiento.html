@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-
+{% block title %}Detalles Tratamiento {{ tratamientoSeleccionado[4] }}{% endblock %}
 
 {% block customCSSyJs %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
@@ -17,46 +17,47 @@
     </div>
     <div class="card-body">
         <h4>Tratamiento: {{ tratamientoSeleccionado[4] }}</h4>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Sesión</th>
-              <th>Fecha Sesion</th>
-              <th>Detalles</th>
-              <th>Firma</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for firmaPaciente in firmasPacientes %}
-              <tr>
-                <td>{{ firmaPaciente[5] }}</td>
-                {% if firmaPaciente[6] == None %}
-                    <td><input type="date" class="form-control" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
-                {% else %}
-                    <td>{{ firmaPaciente[6] }}</td>
-                {% endif %}
-                <td>
-                    <ul>
-                        <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>
-                        <li>Nombre Esteticista: {{ esteticista[0] }}</li>
-                        {% if firmaPaciente[7] == None %}
-                            <li>No se encontraron observaciones para este paciente.</li>
-                        {% else %}
-                            <li>Observaciones: {{ firmaPaciente[7] }}</li>
-                        {% endif %}
-                    </ul>
-                </td>
-                {% if firmaPaciente[4] != None and firmaPaciente[5] == sesion %}
-                    <td><img src="{{ url_for('static', filename='/img/firmas/{{firmaPaciente[4]}}') }}"/></td>
-                {% else %}
-                    
-                    <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a><input class="d-none" id="idfirmapaciente" value="{{ firmaPaciente[0] }}"></td>
-                {% endif %}
-
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sesión</th>
+                    <th>Fecha Sesion</th>
+                    <th>Detalles</th>
+                    <th>Firma</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for firmaPaciente in firmasPacientes %}
+                    <tr>
+                      <td>{{ firmaPaciente[5] }}</td>
+                      {% if firmaPaciente[6] == None %}
+                          <td><input type="date" class="form-control" id="fechasesion" name="fechaSesion" placeholder="Fecha Sesion.."/></td>
+                      {% else %}
+                          <td>{{ firmaPaciente[6] }}</td>
+                      {% endif %}
+                      <td>
+                          <ul>
+                              <li>Nombre Tratamiento: {{ tratamientoSeleccionado[4] }}</li>
+                              <li>Nombre Esteticista: {{ esteticista[0] }}</li>
+                              {% if firmaPaciente[7] == None %}
+                                  <li>No se encontraron observaciones para este paciente. <button id="habilitarObservaciones" class="btn btn-success"><i class="bi bi-plus"></i></button></li>
+                                  <input type="text" id="observaciones" name="observaciones" class="form-control d-none" placeholder="Agregar observación...">
+                              {% else %}
+                                  <li>Observaciones: {{ firmaPaciente[7] }}</li>
+                              {% endif %}
+                          </input<>
+                      </td>
+                      {% if firmaPaciente[3] != None %}
+                          <td><img src="{{ url_for('static', filename='img/firmas/' + firmaPaciente[4]) }}"/></td>
+                      {% else %}
+                          <td><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#firmar">Firmar</a><input class="d-none" id="idfirmapaciente" value="{{ firmaPaciente[0] }}"></td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
     </div>
 </div>
 

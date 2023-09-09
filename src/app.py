@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'estetica'
+app.config['MYSQL_PASSWORD'] = 'abc.123'
+app.config['MYSQL_DB'] = 'pruebas'
 
 mysql = MySQL(app)
 
@@ -272,7 +272,6 @@ def agregarFirma():
 def save_signature():
     try:
         data = request.json
-        print(data)
         image_data = data["image"].split(';base64,').pop()
         
         # Verificar si 'treatment_id' está en los datos recibidos
@@ -281,12 +280,16 @@ def save_signature():
             return jsonify(success=False, message="treatment_id not provided")
 
         treatment_id = data["treatment_id"]  # Recuperar el valor de treatment_id
+        fechasesion = data["fechasesion"]  
+        obsevaciones = data["observaciones"]
+        
+        print(data)
         
         # Crear las carpetas si no existen
-        if not os.path.exists('AppEstetica/src/static/img/firmas'):
-            os.makedirs('AppEstetica/src/static/img/firmas')
+        if not os.path.exists('src/static/img/firmas'):
+            os.makedirs('src/static/img/firmas')
         
-        file_path = os.path.join('AppEstetica', 'src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
+        file_path = os.path.join( 'src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
         urlimg=os.path.basename(file_path)
 
         print(urlimg)

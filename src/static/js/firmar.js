@@ -18,7 +18,9 @@ document.getElementById("saveSignature").addEventListener("click", function() {
     } else {
         let dataURL = signaturePad.toDataURL();
         let idfirmapaciente = document.getElementById('idfirmapaciente').value;  // Obtener el valor del campo idfirmapaciente
-        console.log(idfirmapaciente)
+        let fechasesion = document.getElementById('fechasesion').value;  
+        let observaciones = document.getElementById('observaciones').value;  
+        
         // Enviar la firma al servidor
         fetch('/saveSignature', {
             method: 'POST',
@@ -27,23 +29,22 @@ document.getElementById("saveSignature").addEventListener("click", function() {
             },
             body: JSON.stringify({ 
                 image: dataURL,
-                treatment_id: idfirmapaciente  // Incluir el valor en la solicitud
+                treatment_id: idfirmapaciente,
+                fechasesion: fechasesion,
+                observaciones: observaciones
             })
         }).then(response => response.json()).then(data => {
             if (data.success) {
                 alert("Firma guardada con éxito!");
-                $('#firmar').modal('hide');  // Cerrar el modal
+                $('#firmar').modal('hide');
+                window.location.reload();  
+                // Cerrar el modal
             } else {
                 alert("Hubo un error al guardar la firma.");
             }
         });
     }
 });
-
-
-
-
-
 
 function download(dataURL, filename) {
     let blob = dataURLtoBlob(dataURL);
@@ -67,3 +68,10 @@ function dataURLtoBlob(dataURL) {
     }
     return new Blob([new Uint8Array(array)], {type: 'image/png'});
 }
+
+$(document).ready(function() {
+    $('#habilitarObservaciones').click(function() {
+        $('#observaciones').removeClass('d-none');
+        $(this).addClass('d-none');
+    });
+});

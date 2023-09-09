@@ -14,10 +14,6 @@ body {
 .buscar {
     width: 100%;
     padding: 5px;
-
-    display: flex;
-    justify-content: center;
-    align-items: start
 }
 
 .searchBar {
@@ -84,9 +80,9 @@ body {
 }
 
 .agregar {
-    position: absolute;
+    /* position: absolute;
     right: 15%;
-    top: 4%;
+    top: 4%; */
     width: 80px;
     height: 80px;
     box-shadow: 10px 10px 21px -6px rgba(175, 175, 175, 0.2);
@@ -99,4 +95,38 @@ body {
     border: 0;
     border-radius: 50%;
     transition: all 0,3s;
+}
+
+@media (min-width: 770px) and (max-width: 970px){
+    .boton {
+        border: 0;
+    }
+    .agregar {
+        width: 120px;
+        height: 100px;
+        border-radius: 50%;
+    }
+}
+/* Estilos específicos para dispositivos con un ancho máximo de 768px (tablets, dispositivos móviles) */
+@media (max-width: 768px) {
+    .searchBar {
+        width: 80%; /* Reducir el ancho del formulario de búsqueda */
+    }
+    
+    .buscar {
+        width: 100%;
+    }
+    
+    .agregar {
+        width: 100px;
+        height: 80px;
+        position: relative;
+        right: 10px;
+        top: 50px;
+    }
+    
+    .searchBar button {
+        position: absolute;
+        right: 10px;
+    }
 }

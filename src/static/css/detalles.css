@@ -30,6 +30,32 @@ canvas {
     display: block;
     margin: 20px auto;
 }
+
+@media (min-width: 768px) {
+    .carta {
+        width: 75%;
+    }
+}
+
+@media (max-width: 765px) {
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .contenedor {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    .addT {
+        display: flex;
+        margin-left: 202px;
+    }
+}
+
 #btnimprimir {
     position: absolute;  /* Establecer posición absoluta */
     top: 25px;          /* 10px desde el borde superior */
@@ -49,7 +75,7 @@ canvas {
     }
 
     /* Oculta otros elementos que no quieres imprimir */
-    #btnimprimir {
+    #btnimprimir, .home, #activar, .addT {
         display: none;
     }
 
