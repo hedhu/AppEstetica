@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'abc.123'
-app.config['MYSQL_DB'] = 'pruebas'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'estetica'
 
 mysql = MySQL(app)
 
@@ -272,7 +272,15 @@ def agregarFirma():
 def save_signature():
     try:
         data = request.json
+        print(data)
         image_data = data["image"].split(';base64,').pop()
+        
+        # Verificar si 'treatment_id' está en los datos recibidos
+        if "treatment_id" not in data:
+            print("treatment_id not provided in the request data")
+            return jsonify(success=False, message="treatment_id not provided")
+
+        treatment_id = data["treatment_id"]  # Recuperar el valor de treatment_id
         
         # Crear las carpetas si no existen
         if not os.path.exists('AppEstetica/src/static/img/firmas'):
@@ -288,14 +296,15 @@ def save_signature():
         
         conn = mysql.connection
         cursor = conn.cursor()
-        cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s, firmas = %s WHERE idFirmasPaciente = %s', (urlimg, str(1), data["treatment_id"]))
+        cursor.execute('UPDATE firmasPaciente SET rutaFirma = %s, firmas = %s WHERE idFirmasPaciente = %s', (urlimg, str(1), treatment_id))
         conn.commit()
         cursor.close()
 
         return jsonify(success=True)
     except Exception as e:
         print(e)
-        return jsonify(success=False)
+        return jsonify(success=False, message=str(e))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
