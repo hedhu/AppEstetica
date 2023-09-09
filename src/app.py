@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for,jsonify
+from flask import Flask, render_template, request, redirect, url_for,jsonify, session, flash
 from flask_mysqldb import MySQL
 import os
 import base64
+
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -30,59 +31,77 @@ def login():
         if usuarios:
             for usuario in usuarios:
                 if usuario[2] == contraseña:
-                    # print('LOGEADO CORRECTAMENTE')
+                    session['usuarioLogeado'] = True
                     return redirect(url_for('buscador'))
                 else:
-                    # print('CONTRASEÑA INCORRECTA...')
+                    flash('CONTRASEÑA INCORRECTA...')
                     cursor.close()
                     return render_template('login.html')
         else:
-            # print('USUARIO NO ENCONTRADO...')
+            flash('USUARIO NO ENCONTRADO...')
             cursor.close()
             return render_template('login.html')
         cursor.close()
     else: 
         return render_template('login.html')
-    
+
+@app.route("/logOut")
+def logOut():
+    session.pop("usuarioLogeado", None)
+    return redirect(url_for("index"))
+ 
 @app.route('/tratamientos', methods = ['POST', 'GET'])
 def tratamientos():
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tratamientos')
-    tratamientos = cursor.fetchall()
-    cursor.close()
-    ntratamientos = len(tratamientos)
-    return render_template('tratamientos.html', ntratamientos=ntratamientos, tratamientos=tratamientos)
+    if session.get("usuarioLogeado"):
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM tratamientos')
+        tratamientos = cursor.fetchall()
+        cursor.close()
+        ntratamientos = len(tratamientos)
+        return render_template('tratamientos.html', ntratamientos=ntratamientos, tratamientos=tratamientos)
+    else:
+        return redirect(url_for("login"))
 
 @app.route('/agregarTratamientos', methods = ['POST', 'GET'])
 def agregarTratamientos():
     if request.method == 'POST':
         nombreTratamiento = request.form['nombreTratamiento']
-        conn = mysql.connection
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
-        mysql.connection.commit()
-        cursor.close()
+        if nombreTratamiento == '':
+            flash('Ingreses Datos Validos Para El Tratamiento')
+        else:
+            conn = mysql.connection
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO tratamientos (nombreTratamiento) VALUES (%s)', (nombreTratamiento,))
+            mysql.connection.commit()
+            cursor.close()
         return redirect(url_for('tratamientos'))
 
 @app.route('/borrarTratamiento/<string:idTratamiento>')
 def borrarTratamiento(idTratamiento):
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('DELETE FROM tratamientos WHERE idTratamiento = (%s)', (idTratamiento,))
-    mysql.connection.commit()
-    cursor.close()
+    try:
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM tratamientos WHERE idTratamiento = (%s)', (idTratamiento,))
+        mysql.connection.commit()
+        cursor.close()
+    except:
+        flash('No se puede borrar un tratamiento que esta en uso')
+        
     return redirect(url_for('tratamientos'))
 
 @app.route('/esteticistas', methods = ['POST', 'GET'])
 def esteticistas():
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM esteticistas')
-    esteticistas = cursor.fetchall()
-    cursor.close()
-    nesteticistas = len(esteticistas)
-    return render_template('esteticistas.html', nesteticistas=nesteticistas, esteticistas=esteticistas)
+    if session.get("usuarioLogeado"):
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM esteticistas')
+        esteticistas = cursor.fetchall()
+        cursor.close()
+        nesteticistas = len(esteticistas)
+        return render_template('esteticistas.html', nesteticistas=nesteticistas, esteticistas=esteticistas)
+    else:
+        return redirect(url_for("login"))
 
 @app.route('/agregarEsteticistas', methods = ['POST', 'GET'])
 def agregarEsteticistas():
@@ -90,30 +109,35 @@ def agregarEsteticistas():
         nombreEsteticista = request.form['nombreEsteticista']
         correoEsteticista = request.form['correoEsteticista']
         telEsteticista = request.form['telEsteticista']
-        conn = mysql.connection
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO esteticistas (nombreEsteticista, correoEsteticista, telefonoEsteticista) VALUES (%s, %s, %s)', (nombreEsteticista, correoEsteticista, telEsteticista))
-        mysql.connection.commit()
-        cursor.close()
+        if nombreEsteticista == '' or correoEsteticista == '' or telEsteticista == '':
+            flash('Ingrese Datos Validos Para El Esteticista')
+        else:
+            conn = mysql.connection
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO esteticistas (nombreEsteticista, correoEsteticista, telefonoEsteticista) VALUES (%s, %s, %s)', (nombreEsteticista, correoEsteticista, telEsteticista))
+            mysql.connection.commit()
+            cursor.close()
         return redirect(url_for('esteticistas'))
 
 @app.route('/buscador', methods=['GET'])
 def buscador():
-    conn = mysql.connection
-    cursor = conn.cursor()
-    
-    search_query = request.args.get('buscador')
-    if search_query:
-        # Use the LIKE keyword to search for patients
-        cursor.execute('SELECT * FROM pacientes WHERE nombrePaciente LIKE %s', ('%' + search_query + '%',))
-    else:
-        cursor.execute('SELECT * FROM pacientes')
-        
-    pacientes = cursor.fetchall()
-    npacientes = len(pacientes)
-    cursor.close()
-    return render_template('buscador.html', npacientes=npacientes, pacientes=pacientes)
+    if session.get("usuarioLogeado"):
+        conn = mysql.connection
+        cursor = conn.cursor()
 
+        search_query = request.args.get('buscador')
+        if search_query:
+            # Use the LIKE keyword to search for patients
+            cursor.execute('SELECT * FROM pacientes WHERE nombrePaciente LIKE %s', ('%' + search_query + '%',))
+        else:
+            cursor.execute('SELECT * FROM pacientes')
+
+        pacientes = cursor.fetchall()
+        npacientes = len(pacientes)
+        cursor.close()
+        return render_template('buscador.html', npacientes=npacientes, pacientes=pacientes)
+    else:
+        return redirect(url_for("login"))
 
 @app.route('/agregarPaciente', methods = ['POST', 'GET'])
 def agregarPaciente():
@@ -139,41 +163,44 @@ def agregarPaciente():
 
 @app.route('/detallesPaciente/<string:id>')
 def detallesPaciente(id):
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM pacientes WHERE idPacientes = %s', (id,))
-    paciente = cursor.fetchone()
+    if session.get("usuarioLogeado"):
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM pacientes WHERE idPacientes = %s', (id,))
+        paciente = cursor.fetchone()
+        
+        cursor.execute('SELECT * FROM tratamientospacientes WHERE idPaciente = %s', (id,))
+        tratamientosP = cursor.fetchall()
+        
+        tratamientos = []    
+        if tratamientosP:
+            for tratamientoP in tratamientosP:
+                cursor.execute('SELECT * FROM tratamientos WHERE idTratamiento = %s', (tratamientoP[1],))
+                tratamiento = cursor.fetchone()
+                tratamientos.append(tratamiento)
+        
+        data = [(tratamientoP, tratamiento) for tratamientoP, tratamiento in zip(tratamientosP, tratamientos)]
     
-    cursor.execute('SELECT * FROM tratamientospacientes WHERE idPaciente = %s', (id,))
-    tratamientosP = cursor.fetchall()
+        cursor.execute('SELECT * FROM tratamientos')
+        tratamientosT = cursor.fetchall()
     
-    tratamientos = []    
-    if tratamientosP:
-        for tratamientoP in tratamientosP:
-            cursor.execute('SELECT * FROM tratamientos WHERE idTratamiento = %s', (tratamientoP[1],))
-            tratamiento = cursor.fetchone()
-            tratamientos.append(tratamiento)
-    
-    data = [(tratamientoP, tratamiento) for tratamientoP, tratamiento in zip(tratamientosP, tratamientos)]
+        cursor.execute('SELECT * FROM esteticistas')
+        esteticistas = cursor.fetchall()
 
-    cursor.execute('SELECT * FROM tratamientos')
-    tratamientosT = cursor.fetchall()
-    
-    cursor.execute('SELECT * FROM esteticistas')
-    esteticistas = cursor.fetchall()
-    
-    paciente = list(paciente) 
+        paciente = list(paciente) 
 
-    for i in range(1, len(paciente)):
-        if paciente[i] is None:
-            paciente[i] = ''
-        else:
-            pass
+        for i in range(1, len(paciente)):
+            if paciente[i] is None:
+                paciente[i] = ''
+            else:
+                pass
 
-    paciente = tuple(paciente)  
+        paciente = tuple(paciente)  
 
-    cursor.close()
-    return render_template('detallesPaciente.html', data=data, paciente=paciente, tratamientosT=tratamientosT, esteticistas=esteticistas)
+        cursor.close()
+        return render_template('detallesPaciente.html', data=data, paciente=paciente, tratamientosT=tratamientosT, esteticistas=esteticistas)
+    else:
+        return redirect(url_for("login"))
 
 @app.route('/actualizarPaciente/<string:idPaciente>', methods = ['POST', 'GET', 'PUT'])
 def actualizarPaciente(idPaciente):
@@ -215,50 +242,53 @@ def agregarTratamiento():
     else:
         return redirect(url_for('detallesPaciente', id=idPaciente))
 
-@app.route('/borrarTratamientoPaciente/<string:idTratamiento>/<string:idPaciente>')
-def borrarTratamientoP(idTratamiento, idPaciente):
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('DELETE FROM tratamientospacientes WHERE idTratamientos = (%s) AND idPaciente = (%s)', (idTratamiento, idPaciente))
-    mysql.connection.commit()
-    cursor.close()
-    return redirect(url_for('detallesPaciente', id=idPaciente))
+# @app.route('/borrarTratamientoPaciente/<string:idTratamiento>/<string:idPaciente>')
+# def borrarTratamientoP(idTratamiento, idPaciente):
+#     conn = mysql.connection
+#     cursor = conn.cursor()
+#     cursor.execute('DELETE FROM tratamientospacientes WHERE idTratamientos = (%s) AND idPaciente = (%s)', (idTratamiento, idPaciente))
+#     mysql.connection.commit()
+#     cursor.close()
+#     return redirect(url_for('detallesPaciente', id=idPaciente))
 
 @app.route('/detallesTratamiento/<string:idTratamiento>/<string:idPaciente>', methods=['GET', 'POST'])
 def detallesTratamiento(idTratamiento, idPaciente):
-    idTP = request.args.get('idTP')
-    sesiones = request.args.get('sesiones')
-    fecha = request.args.get('fecha')
-    print(idTP, sesiones, fecha)
-    
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (idTP,))
-    x = cursor.fetchall()
-    if len(x) <= 0:
-        for i in  range(1, int(sesiones)+1):
-            if i == 1:
-                cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion, fechaSesion) VALUES (%s, %s, %s, %s)',(idTP, idPaciente, i, fecha))
-                conn.commit()
-            else:
-                cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion) VALUES (%s, %s, %s)',(idTP, idPaciente, i))
-                conn.commit()
+    if session.get("usuarioLogeado"):
+        idTP = request.args.get('idTP')
+        sesiones = request.args.get('sesiones')
+        fecha = request.args.get('fecha')
+        print(idTP, sesiones, fecha)
+
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (idTP,))
+        x = cursor.fetchall()
+        if len(x) <= 0:
+            for i in  range(1, int(sesiones)+1):
+                if i == 1:
+                    cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion, fechaSesion) VALUES (%s, %s, %s, %s)',(idTP, idPaciente, i, fecha))
+                    conn.commit()
+                else:
+                    cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion) VALUES (%s, %s, %s)',(idTP, idPaciente, i))
+                    conn.commit()
+        else:
+            pass
+        cursor.close()
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idTratamiento, idPaciente))
+        tratamientoSeleccionado = cursor.fetchone()
+        print(tratamientoSeleccionado)
+        cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+        esteticista = cursor.fetchone()
+        print(esteticista)
+        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+        firmasPacientes = cursor.fetchall()
+        print(firmasPacientes)
+        cursor.close()
+        return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
     else:
-        pass
-    cursor.close()
-    conn = mysql.connection
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idTratamiento, idPaciente))
-    tratamientoSeleccionado = cursor.fetchone()
-    print(tratamientoSeleccionado)
-    cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
-    esteticista = cursor.fetchone()
-    print(esteticista)
-    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
-    firmasPacientes = cursor.fetchall()
-    print(firmasPacientes)
-    cursor.close()
-    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+        return redirect(url_for("login"))
 
 @app.route('/agregarFirma', methods=['POST', 'GET'])
 def agregarFirma():

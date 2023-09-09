@@ -3,12 +3,13 @@
 
 {% block customCSSyJs %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/buscador.css') }}">
+    <script src="{{ url_for('static', filename='js/buscador.js') }}"></script>  
 {% endblock %}
     
 {% block content %}
-<div class="buscar d-flex justify-content-around align-items-center w-100 mt-2">
+<div class="buscar d-flex justify-content-around align-items-center w-100 mt-2 flex-row">
     <div class="logOut mx-2 mx-md-4">
-        <a class="btn btn-outline-secondary active" role="button" data-bs-toggle="button" aria-pressed="true"><i class="bi bi-box-arrow-left"></i></a>
+        <a href="{{url_for('logOut')}}" class="btn btn-secondary"><i class="bi bi-box-arrow-left"></i></a>
     </div>
     <form  method="get" class="searchBar">
         <input type="text" placeholder="Buscar Paciente..." name="buscador"/>
@@ -19,6 +20,10 @@
         <button class="boton btn btn-secondary" data-bs-toggle="modal" data-bs-target="#agregarPaciente"><i class="bi bi-plus-lg"></i></button>
     </div>
     {% endif %}
+</div>
+<div class="d-flex w-25">
+    <a onclick="verificarContraseñaT()" class="btn btn-success ms-4 mx-2"><i class="bi bi-clipboard-plus-fill"></i></a>
+    <a onclick="verificarContraseñaE()"" class="btn btn-primary"><i class="bi bi-person-plus-fill"></i></a>
 </div>
 <div class="pacientes">
 {% if npacientes == 0 %}

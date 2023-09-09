@@ -42,8 +42,8 @@
                               <li>Nombre Esteticista: {{ esteticista[0] }}</li>
                               {% if firmaPaciente[7] == None %}
                                   <li>No se encontraron observaciones para este paciente.</li>
-                                  <!-- <textarea type="text" id="observaciones{{ firmaPaciente[5] }}" name="observaciones" class="form-control d-none" placeholder="Agregar observación..."></textarea>
-                                  <a id="agregarO{{ firmaPaciente[5] }}" class="btn btn-success d-none" href="/agregarObservacion/{{ firmaPaciente[0] }}">Agregar Observacion</a> -->
+                                  <!-- <textarea type="text" id="observaciones{{ firmaPaciente[5] }}" name="observaciones" class="form-control d-none" placeholder="Agregar observación..."></textarea>-->
+                                  <!-- <a id="agregarO" onClick='Activar()' class="btn btn-success">Agregar Observacion</a>  -->
                               {% else %}
                                   <li>Observaciones: {{ firmaPaciente[7] }}</li> 
                               {% endif %} 

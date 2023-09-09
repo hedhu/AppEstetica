@@ -98,9 +98,6 @@ document.getElementById("saveSignature").addEventListener("click", function() {
     }
 });
 
-        
-
-
 function download(dataURL, filename) {
     let blob = dataURLtoBlob(dataURL);
     let url = window.URL.createObjectURL(blob);
@@ -123,3 +120,4 @@ function dataURLtoBlob(dataURL) {
     }
     return new Blob([new Uint8Array(array)], {type: 'image/png'});
 }
+
