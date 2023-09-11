@@ -118,6 +118,35 @@ def agregarEsteticistas():
             mysql.connection.commit()
             cursor.close()
         return redirect(url_for('esteticistas'))
+    
+@app.route('/editarEsteticista', methods=['POST'])
+def actualizarEsteticista():
+    if request.method == 'POST':
+        idEsteticista = request.form['idEsteticista']
+        nombreEsteticistaEdit = request.form['nombreEsteticistaEdit']
+        correoEsteticistaEdit = request.form['correoEsteticistaEdit']
+        telEsteticistaEdit = request.form['telEsteticistaEdit']
+
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('UPDATE esteticistas SET nombreEsteticista = %s, correoEsteticista = %s, telefonoEsteticista = %s WHERE idEsteticistas = %s', (nombreEsteticistaEdit, correoEsteticistaEdit, telEsteticistaEdit, idEsteticista))
+        conn.commit()
+        cursor.close()
+        
+        flash('Esteticista editado exitosamente')
+        return redirect(url_for('esteticistas'))
+
+@app.route('/borrarEsteticista/<string:idEsteticistas>')
+def borrarEsteticista(idEsteticistas):
+    try:
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM esteticistas WHERE idEsteticistas = (%s)', (idEsteticistas,))
+        mysql.connection.commit()
+        cursor.close()
+    except:
+        flash('No se puede borrar un esteticista que esté a cargo de un tratamiento')
+    return redirect(url_for('esteticistas'))
 
 @app.route('/buscador', methods=['GET'])
 def buscador():
@@ -217,8 +246,7 @@ def actualizarPaciente(idPaciente):
         implatesDispositivos = request.form['implatesDispositivos']
         conn = mysql.connection
         cursor = conn.cursor()
-        p = cursor.execute('UPDATE pacientes SET nombrePaciente = %s, edadPaciente = %s, fechaNacimiento = %s, Telefono = %s, Ocupacion = %s, Enfermedades = %s, EnfermedadesCronicas = %s, Medicamentos = %s, Alergias = %s, Implantes_Dispositivos = %s WHERE idPacientes = %s', (nombrePaciente, edadPaciente, fechaNac, telPaciente, ocupacion, enfermedades, enfermedadesCro, medicamentos, alergias, implatesDispositivos, idPaciente))
-        print(p)
+        cursor.execute('UPDATE pacientes SET nombrePaciente = %s, edadPaciente = %s, fechaNacimiento = %s, Telefono = %s, Ocupacion = %s, Enfermedades = %s, EnfermedadesCronicas = %s, Medicamentos = %s, Alergias = %s, Implantes_Dispositivos = %s WHERE idPacientes = %s', (nombrePaciente, edadPaciente, fechaNac, telPaciente, ocupacion, enfermedades, enfermedadesCro, medicamentos, alergias, implatesDispositivos, idPaciente))
         mysql.connection.commit()
         cursor.close()
         return redirect(url_for('detallesPaciente', id=idPaciente))
@@ -257,7 +285,6 @@ def detallesTratamiento(idTratamiento, idPaciente):
         idTP = request.args.get('idTP')
         sesiones = request.args.get('sesiones')
         fecha = request.args.get('fecha')
-        print(idTP, sesiones, fecha)
 
         conn = mysql.connection
         cursor = conn.cursor()
@@ -276,15 +303,12 @@ def detallesTratamiento(idTratamiento, idPaciente):
         cursor.close()
         conn = mysql.connection
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idTratamiento, idPaciente))
+        cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idTP, ))
         tratamientoSeleccionado = cursor.fetchone()
-        print(tratamientoSeleccionado)
         cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
         esteticista = cursor.fetchone()
-        print(esteticista)
         cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
         firmasPacientes = cursor.fetchall()
-        print(firmasPacientes)
         cursor.close()
         return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
     else:
@@ -311,8 +335,6 @@ def save_signature():
 
         treatment_id = data["treatment_id"]  # Recuperar el valor de treatment_id
         
-        print(data)
-        
         # Crear las carpetas si no existen
         if not os.path.exists('src/static/img/firmas'):
             os.makedirs('src/static/img/firmas')
@@ -320,7 +342,6 @@ def save_signature():
         file_path = os.path.join( 'src','static','img','firmas', f'firma_{os.urandom(8).hex()}.png')
         urlimg=os.path.basename(file_path)
 
-        print(urlimg)
         
         with open(file_path, "wb") as f:
             f.write(base64.b64decode(image_data))
@@ -335,7 +356,32 @@ def save_signature():
     except Exception as e:
         print(e)
         return jsonify(success=False, message=str(e))
-
+    
+@app.route('/agregarSesion/<string:idtratamientosPacientes>/<string:idPaciente>', methods=['GET', 'POST'])
+def agregarSesion(idtratamientosPacientes, idPaciente):
+   
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT COUNT(*) FROM firmaspaciente WHERE idTratamientosPaciente = %s', (idtratamientosPacientes,))
+    sesionesActuales = cursor.fetchone()[0]
+    nuevaSesion = sesionesActuales + 1
+    cursor.execute('INSERT INTO firmaspaciente (idTratamientosPaciente, idPaciente, numeroSesion) VALUES (%s, %s, %s)',(idtratamientosPacientes, idPaciente, nuevaSesion))
+    conn.commit()
+    cursor.execute('UPDATE tratamientospacientes SET numSesiones = %s WHERE idtratamientosPacientes = %s', (nuevaSesion, idtratamientosPacientes))
+    conn.commit()
+    cursor.close()
+    
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idtratamientosPacientes, ))
+    tratamientoSeleccionado = cursor.fetchone()
+    cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+    esteticista = cursor.fetchone()
+    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+    firmasPacientes = cursor.fetchall()
+    cursor.close()
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+ 
 @app.route('/agregarObservacion', methods=['POST', 'GET'])
 def agregarObservacion():
     idFirmasPaciente = request.form['numSesiones']
@@ -343,8 +389,7 @@ def agregarObservacion():
     observaciones = request.form['observaciones']
     idP = request.form['idP']
     idT = request.form['idT']
-    print(idP)
-    print(idT)
+    idTP = request.form['idTP']
     if fechaSesion == None:
         conn = mysql.connection
         cursor = conn.cursor()
@@ -359,15 +404,12 @@ def agregarObservacion():
         cursor.close()
     conn = mysql.connection
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idTratamientos = %s AND idPaciente = %s', (idT, idP))
+    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idTP, ))
     tratamientoSeleccionado = cursor.fetchone()
-    print(tratamientoSeleccionado)
     cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
     esteticista = cursor.fetchone()
-    print(esteticista)
     cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
     firmasPacientes = cursor.fetchall()
-    print(firmasPacientes)
     cursor.close()
     return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
    

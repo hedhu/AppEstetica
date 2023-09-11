@@ -121,3 +121,6 @@ function dataURLtoBlob(dataURL) {
     return new Blob([new Uint8Array(array)], {type: 'image/png'});
 }
 
+document.getElementById('btnimprimir').addEventListener('click', function () {
+    window.print(); 
+});

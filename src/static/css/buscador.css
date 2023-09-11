@@ -61,14 +61,19 @@ body {
     background: #3b3939;
 }
 
-.tabla {
+.contenedorTabla {
+    background-color: #ffff;
+    border-radius: 5%;
     box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+}
+
+.tabla {
+    border-radius: 20%;
 }
 
 .pacientes {
     display: flex;
     justify-content: center;
-
 }
 
 .card {
@@ -83,30 +88,53 @@ body {
     /* position: absolute;
     right: 15%;
     top: 4%; */
-    width: 80px;
-    height: 80px;
-    box-shadow: 10px 10px 21px -6px rgba(175, 175, 175, 0.2);
+    border: none;
+    width: 60px;
+    height: 60px;
     transition: all 0,3s;
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+}
+
+.tooltiptext {
+    visibility: visible;
+    width: 120px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+.agregar:hover .tooltiptext{
+    visibility: visible;
+    opacity: 1;
 }
 
 .boton {
-    width: 100%;
-    height: 100%;
     border: 0;
     border-radius: 50%;
     transition: all 0,3s;
 }
 
-@media (min-width: 770px) and (max-width: 970px){
-    .boton {
-        border: 0;
-    }
-    .agregar {
-        width: 120px;
-        height: 100px;
-        border-radius: 50%;
-    }
+.botones {
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    min-width: 250px;
+    border-radius: 60px;
+    box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
+    padding: 10px 20px;
+    backdrop-filter: blur(4px) saturate(100%);
 }
+
+
 /* Estilos específicos para dispositivos con un ancho máximo de 768px (tablets, dispositivos móviles) */
 @media (max-width: 768px) {
     .searchBar {

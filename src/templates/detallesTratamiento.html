@@ -3,12 +3,11 @@
 
 {% block customCSSyJs %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/firmar.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="return">
+<div class="retrn mt-2">
     <a class="btn btn-secondary" href="/detallesPaciente/{{ tratamientoSeleccionado[2] }}"><i class="bi bi-arrow-return-left"></i></a>
 </div>
 <div class="card m-3 carta" id="detallesTratamiento">
@@ -16,7 +15,17 @@
         <h5 class="card-title">Detalles del Tratamiento</h5>
     </div>
     <div class="card-body">
-        <h4>Tratamiento: {{ tratamientoSeleccionado[4] }}</h4>
+        <div class="d-flex justify-content-between">
+            <a href="/agregarSesion/{{ tratamientoSeleccionado[0] }}/{{ tratamientoSeleccionado[2] }}" class="btn btn-success" id="agregarSesionBtn">
+                <i class="bi bi-plus"></i> <span class="d-none d-sm-inline-block">Agregar Sesion</span>
+            </a>            
+            <div id="btnimprimir">
+                <button class="btn btn-primary" onclick="imprimir()">
+                    <i class="bi bi-printer more"></i> <span class="more d-none d-sm-inline-block">Imprimir</span>
+                </button>
+            </div>
+        </div>
+        <h4 class="text-center my-2 mb-3">Tratamiento: {{ tratamientoSeleccionado[4] }}</h4>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -84,6 +93,10 @@
                 <label for="idT" class="form-label">IdTratamiento:</label>
                 <input type="text" id="idT" name="idT" class="form-control" placeholder="Agregar observación..." value="{{ tratamientoSeleccionado[1] }}" />
             </div>
+            <div class="mb-3 d-none">
+                <label for="idTP" class="form-label">IdTratamientosPaciente:</label>
+                <input type="text" id="idTP" name="idTP" class="form-control" placeholder="Agregar observación..." value="{{ tratamientoSeleccionado[0] }}" />
+            </div>
             <div class="modal-footer justify-content-center">
                 <button id="agregarO" class="btn btn-success">Agregar Observacion</button>
             </div>
@@ -103,7 +116,7 @@
                 <form id="firmarForm" action"#" >
                     <div class="form-group mt-4">
                         <label for='signature-pad'>Firma:</label>
-                        <canvas id="signature-pad" name='signaturePad' width="400px" height="200"></canvas>
+                        <canvas id="signature-pad" name='signaturePad' width="340px" height="200"></canvas>
                         <a class="btn btn-light" id="clearPad">Limpiar Firma</a>
                         <a class="btn btn-success" id="saveSignature">Firmar</a>
 

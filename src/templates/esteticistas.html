@@ -4,7 +4,7 @@
 
 {% block customCSSyJs %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/esteticistas.css') }}">
-    <!-- <script src="{{ url_for('static', filename='js/tratamientos.js') }}"></script>    -->
+    <script src="{{ url_for('static', filename='js/esteticistas.js') }}"></script>   
 {% endblock %}
 
 {% block content %}
@@ -86,11 +86,40 @@
                             <td>{{ esteticista[1] }}</td> 
                             <td>{{ esteticista[2] }}</td> 
                             <td>{{ esteticista[3] }}</td> 
-                            <td class="d-flex justify-content-around"><a class="btn btn-warning" href="#"><i class="bi bi-pencil-square"></i></a><a class="btn btn-danger" href="#"><i class="bi bi-trash"></i></a></td> 
+                            <td class="d-flex justify-content-around"><a class="btn btn-warning" href="#" onclick="editarEsteticista('{{ esteticista[0] }}', '{{ esteticista[1] }}', '{{ esteticista[2] }}', '{{ esteticista[3] }}')" data-bs-toggle="modal" data-bs-target="#editarEsteticistaModal"><i class="bi bi-pencil-square"></i></a><a class="btn btn-danger" href="borrarEsteticista/{{ esteticista[0] }}"><i class="bi bi-trash"></i></a></td> 
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <!-- Modal de edición -->
+            <div class="modal fade" id="editarEsteticistaModal" tabindex="-1" aria-labelledby="editarEsteticistaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarEsteticistaModalLabel">Editar Esteticista</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/editarEsteticista" method="POST">
+                                <input type="hidden" id="idEsteticista" name="idEsteticista" value="">
+                                <div class="mb-3">
+                                    <label for="nombreEsteticistaEdit" class="form-label">Nombre:</label>
+                                    <input type="text" class="form-control" id="nombreEsteticistaEdit" name="nombreEsteticistaEdit" placeholder="Nombre Esteticista">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="correoEsteticistaEdit" class="form-label">Correo:</label>
+                                    <input type="email" class="form-control" id="correoEsteticistaEdit" name="correoEsteticistaEdit" placeholder="Correo Esteticista">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telEsteticistaEdit" class="form-label">Telefono:</label>
+                                    <input type="text" class="form-control" id="telEsteticistaEdit" name="telEsteticistaEdit" placeholder="Telefono Esteticista">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 

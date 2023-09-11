@@ -12,11 +12,11 @@ body {
 }
 
 .return {
-    position: absolute;
+    /* position: absolute;
     right: 0;
     top: 0;
     margin-right: 3%;
-    margin-top: 3%;
+    margin-top: 3%; */
     box-shadow: 10px 10px 21px -6px rgba(0,0,0, 0.2);
 }
 
@@ -29,4 +29,28 @@ canvas {
     border: 1px solid black;
     display: block;
     margin: 20px auto;
+}
+
+@media print {
+    body, .container, #detallesTratamiento, .card-body {
+        display: block;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+        background-color: white;
+        overflow: visible !important;  
+        margin: 0;  
+        padding: 0;  
+        position: static !important;  
+    }
+
+    body {
+        padding: 20px;
+    }
+
+    /* Oculta otros elementos que no quieres imprimir */
+    #btnimprimir, .return, #agregarObservacionForm, .card-header, #agregarSesionBtn, .more {
+        display: none;
+    }
+
 }
