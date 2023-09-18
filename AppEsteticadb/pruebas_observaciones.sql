@@ -16,29 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `esteticistas`
+-- Table structure for table `observaciones`
 --
 
-DROP TABLE IF EXISTS `esteticistas`;
+DROP TABLE IF EXISTS `observaciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `esteticistas` (
-  `idEsteticistas` int NOT NULL AUTO_INCREMENT,
-  `nombreEsteticista` varchar(150) NOT NULL,
-  `correoEsteticista` varchar(90) NOT NULL,
-  `telefonoEsteticista` varchar(45) NOT NULL,
-  PRIMARY KEY (`idEsteticistas`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `observaciones` (
+  `idObservaciones` int NOT NULL AUTO_INCREMENT,
+  `idTratamientosPacientes` int NOT NULL,
+  `observacion` varchar(176) DEFAULT NULL,
+  PRIMARY KEY (`idObservaciones`),
+  KEY `fk_idTratamientosPacientes_idx` (`idTratamientosPacientes`),
+  CONSTRAINT `fk_idTratamientosPacientes` FOREIGN KEY (`idTratamientosPacientes`) REFERENCES `tratamientospacientes` (`idtratamientosPacientes`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `esteticistas`
+-- Dumping data for table `observaciones`
 --
 
-LOCK TABLES `esteticistas` WRITE;
-/*!40000 ALTER TABLE `esteticistas` DISABLE KEYS */;
-INSERT INTO `esteticistas` VALUES (1,'Juancho Martinez','juanchomartinez@gmail.com','934463824234'),(2,'Javier Gonzalez','javiergonzalez@gmail.com','9427343');
-/*!40000 ALTER TABLE `esteticistas` ENABLE KEYS */;
+LOCK TABLES `observaciones` WRITE;
+/*!40000 ALTER TABLE `observaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `observaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-18 13:03:49
+-- Dump completed on 2023-09-18 13:03:48

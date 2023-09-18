@@ -49,7 +49,7 @@ canvas {
     }
 
     /* Oculta otros elementos que no quieres imprimir */
-    #btnimprimir, .return, #agregarObservacionForm, .card-header, #agregarSesionBtn, .more {
+    #btnimprimir, .return, #agregarObservacionForm, .card-header, #agregarSesionBtn, .more, .observacionGeneral {
         display: none;
     }
 

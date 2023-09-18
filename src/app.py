@@ -309,18 +309,12 @@ def detallesTratamiento(idTratamiento, idPaciente):
         esteticista = cursor.fetchone()
         cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
         firmasPacientes = cursor.fetchall()
+        cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+        observaciones = cursor.fetchone()
         cursor.close()
-        return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+        return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
     else:
         return redirect(url_for("login"))
-
-@app.route('/agregarFirma', methods=['POST', 'GET'])
-def agregarFirma():
-    if request.method == 'POST':
-        firma = request.form['signaturePad']
-        print(firma)
-        return 'recivido'
-
 
 @app.route('/saveSignature', methods=['POST'])
 def save_signature():
@@ -379,8 +373,10 @@ def agregarSesion(idtratamientosPacientes, idPaciente):
     esteticista = cursor.fetchone()
     cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
     firmasPacientes = cursor.fetchall()
+    cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+    observaciones = cursor.fetchone()   
     cursor.close()
-    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
  
 @app.route('/agregarObservacion', methods=['POST', 'GET'])
 def agregarObservacion():
@@ -410,9 +406,48 @@ def agregarObservacion():
     esteticista = cursor.fetchone()
     cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
     firmasPacientes = cursor.fetchall()
+    cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+    observaciones = cursor.fetchone()
     cursor.close()
-    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes)
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
    
+@app.route('/agregarObservacionGeneral/<string:idTratamientosPacientes>', methods=['POST', 'GET'])
+def agregarObservacionGeneral(idTratamientosPacientes):
+    if request.method == 'POST':
+        observaciones = request.form['observaciones']
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO observaciones (idTratamientosPacientes, observacion) VALUES (%s, %s)', (idTratamientosPacientes, observaciones))
+        mysql.connection.commit()
+        cursor.close()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idTratamientosPacientes, ))
+        tratamientoSeleccionado = cursor.fetchone()
+        cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+        esteticista = cursor.fetchone()
+        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+        firmasPacientes = cursor.fetchall()
+        cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+        observaciones = cursor.fetchone()
+        cursor.close()
+        return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
+   
+@app.route('/eliminarObservacion/<string:idTratamientosPacientes>/<string:idObservaciones>', methods=['POST', 'GET'])
+def eliminarObservacion(idTratamientosPacientes, idObservaciones):
+    conn = mysql.connection
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM observaciones WHERE idObservaciones = (%s)', (idObservaciones,))
+    mysql.connection.commit()
+    cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idTratamientosPacientes, ))
+    tratamientoSeleccionado = cursor.fetchone()
+    cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+    esteticista = cursor.fetchone()
+    cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+    firmasPacientes = cursor.fetchall()
+    cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+    observaciones = cursor.fetchone()
+    cursor.close()
+    return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

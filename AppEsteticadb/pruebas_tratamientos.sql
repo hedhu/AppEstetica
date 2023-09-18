@@ -26,7 +26,7 @@ CREATE TABLE `tratamientos` (
   `idTratamiento` int NOT NULL AUTO_INCREMENT,
   `nombreTratamiento` varchar(150) NOT NULL,
   PRIMARY KEY (`idTratamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `tratamientos` (
 
 LOCK TABLES `tratamientos` WRITE;
 /*!40000 ALTER TABLE `tratamientos` DISABLE KEYS */;
-INSERT INTO `tratamientos` VALUES (1,'Depilacion Laser'),(2,'Limpieza Facial'),(3,'Masaje Relajante'),(28,'Depilacion con Cera'),(29,'Pedicure'),(32,'Rinomodelacion');
+INSERT INTO `tratamientos` VALUES (1,'Depilacion Laser'),(2,'Limpieza Facial'),(3,'Masaje Relajante'),(28,'Depilacion con Cera'),(29,'Pedicure'),(32,'Rinomodelacion'),(37,'Masaje Descontracturante');
 /*!40000 ALTER TABLE `tratamientos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-09 17:56:47
+-- Dump completed on 2023-09-18 13:03:49
