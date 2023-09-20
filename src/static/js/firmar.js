@@ -124,3 +124,11 @@ function dataURLtoBlob(dataURL) {
 document.getElementById('btnimprimir').addEventListener('click', function () {
     window.print(); 
 });
+
+function editarObservacion(idObservacion, idTP, observacion) {
+    observacion = observacion.replace(/\n/g, ' ').trim();
+
+    document.getElementById('idObservacion').value = idObservacion;
+    document.getElementById('idTratamientosPacientes').value = idTP;
+    document.getElementById('ObservacionEdit').value = observacion;
+}

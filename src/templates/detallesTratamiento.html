@@ -29,10 +29,10 @@
             <h3>Observacion General</h3>
             {% if observaciones != None %}
                 <p>{{ observaciones[2] }}</p>
-                <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#editObservationModal">Editar</button> -->
+                <a class="btn btn-primary" href="#" onclick="editarObservacion('{{ observaciones[0] }}', '{{ observaciones[1] }}', '{{ observaciones[2] }}')" data-bs-toggle="modal" data-bs-target="#editObservacionModal">Editar</a>
                 <a class="btn btn-danger" href="{{ url_for('eliminarObservacion', idTratamientosPacientes=tratamientoSeleccionado[0], idObservaciones=observaciones[0]) }}">Eliminar</a>
             {% else %}
-                <form action="/agregarObservacionGeneral/{{tratamientoSeleccionado[0]}}" method='POST'>
+                <form action="/agregarObservacionGeneral/{{tratamientoSeleccionado[0]}}/{{tratamientoSeleccionado[1]}}/{{tratamientoSeleccionado[2]}}" method='POST'>
                     <div class="mb-3">
                         <label for="obseracionesForm" class="form-label">Observacion:</label>
                         <textarea class="form-control" id="obseracionesForm" name='observaciones' rows="3" placeholder='Observacion General....'></textarea>
@@ -123,7 +123,7 @@
 </div>
 
 <!-- MODAL PARA EDITAR OBSERVACION -->
-<!-- <div class="modal fade" id="editObservationModal" tabindex="-1" aria-labelledby="editObservationModalLabel" aria-hidden="true">
+<div class="modal fade" id="editObservacionModal" tabindex="-1" aria-labelledby="editObservacionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -131,10 +131,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <form action="/editarObservacion" method="POST">
+                    <input type="hidden" id="idObservacion" name="idObservacion" value="">
+                    <input type="hidden" id="idTratamientosPacientes" name="idTratamientosPacientes" value="">
+                    <div class="mb-3">
+                        <label for="ObservacionEdit" class="form-label">Observacion:</label>
+                        <input type="text" class="form-control" id="ObservacionEdit" name="ObservacionEdit" placeholder="Observacion...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 <!-- MODAL PARA FIRMAR -->
 <div class="modal fade" id="firmar" tabindex="-1" aria-labelledby="firmar" aria-hidden="true">

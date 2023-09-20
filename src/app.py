@@ -411,8 +411,8 @@ def agregarObservacion():
     cursor.close()
     return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
    
-@app.route('/agregarObservacionGeneral/<string:idTratamientosPacientes>', methods=['POST', 'GET'])
-def agregarObservacionGeneral(idTratamientosPacientes):
+@app.route('/agregarObservacionGeneral/<string:idTratamientosPacientes>/<string:idTratamiento>/<string:idPaciente>', methods=['POST', 'GET'])
+def agregarObservacionGeneral(idTratamientosPacientes, idTratamiento, idPaciente):
     if request.method == 'POST':
         observaciones = request.form['observaciones']
         conn = mysql.connection
@@ -448,6 +448,32 @@ def eliminarObservacion(idTratamientosPacientes, idObservaciones):
     observaciones = cursor.fetchone()
     cursor.close()
     return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
+
+@app.route('/editarObservacion', methods=['POST'])
+def actualizarObservacion():
+    if request.method == 'POST':
+        idObservaciones = request.form['idObservacion']
+        idTP = request.form['idTratamientosPacientes']
+        ObservacionEdit = request.form['ObservacionEdit']
+        print('El id TP es:', idTP)
+
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute('UPDATE observaciones SET observacion = %s WHERE idObservaciones = %s', (ObservacionEdit, idObservaciones))
+        conn.commit()
+        
+        flash('Observacion editada exitosamente')
+        cursor.execute('SELECT * FROM tratamientospacientesc WHERE idtratamientosPacientes = %s', (idTP, ))
+        tratamientoSeleccionado = cursor.fetchone()
+        cursor.execute('SELECT nombreEsteticista FROM esteticistas WHERE idEsteticistas = %s', (str(tratamientoSeleccionado[3])))
+        esteticista = cursor.fetchone()
+        cursor.execute('SELECT * FROM firmaspaciente WHERE idTratamientosPaciente = %s', (str(tratamientoSeleccionado[0]),))
+        firmasPacientes = cursor.fetchall()
+        cursor.execute('SELECT * FROM observaciones WHERE idTratamientosPacientes = %s', (str(tratamientoSeleccionado[0]),))
+        observaciones = cursor.fetchone()
+        cursor.close()
+        return render_template('detallesTratamiento.html', tratamientoSeleccionado=tratamientoSeleccionado, esteticista=esteticista, firmasPacientes=firmasPacientes, observaciones=observaciones)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
